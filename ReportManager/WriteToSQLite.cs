@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ReportManager.Model;
+using System.Collections.Generic;
 using System.Data.SQLite;
 
 namespace ReportManager
@@ -12,9 +13,7 @@ namespace ReportManager
         {
             sqlite_conn = new SQLiteConnection("Data Source=database.db" + ";Version=3;New=True;Compress=True;");
             sqlite_conn.Open();
-            sqlite_cmd = new SQLiteCommand("DROP TABLE IF EXISTS "+tableName, sqlite_conn);
-            sqlite_cmd.ExecuteNonQuery();
-            sqlite_cmd.CommandText = "CREATE TABLE "+tableName+" (Circuit string, ErrorCount int ,WarningCount int , SignalsCount int,Status varchar(255),ProcessDate varchar(255),LogDirectory varchar(255));";
+            sqlite_cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS " + tableName+" (Circuit string, ErrorCount int ,WarningCount int , SignalsCount int,Status varchar(255),ProcessDate varchar(255),LogDirectory varchar(255));", sqlite_conn);
             sqlite_cmd.ExecuteNonQuery();
             using (SQLiteTransaction transaction = sqlite_conn.BeginTransaction())
             {
@@ -48,9 +47,7 @@ namespace ReportManager
         {
             sqlite_conn = new SQLiteConnection("Data Source=database.db" + ";Version=3;New=True;Compress=True;");
             sqlite_conn.Open();
-            sqlite_cmd = new SQLiteCommand("DROP TABLE IF EXISTS " + tableName, sqlite_conn);
-            sqlite_cmd.ExecuteNonQuery();
-            sqlite_cmd.CommandText = "CREATE TABLE " + tableName + " (Circuit string , FileContent string,File varchar(255),Date varchar(255),FileState varchar(255),LogDirectory varchar(255));";
+            sqlite_cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS " + tableName + " (Circuit string , FileContent string,File varchar(255),Date varchar(255),FileState varchar(255),LogDirectory varchar(255));", sqlite_conn);
             sqlite_cmd.ExecuteNonQuery();
             using (SQLiteTransaction transaction = sqlite_conn.BeginTransaction())
             {
