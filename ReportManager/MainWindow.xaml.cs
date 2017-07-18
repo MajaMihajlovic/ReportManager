@@ -50,18 +50,6 @@ namespace ReportManager
             var fbd = new FolderBrowserDialog();
             fbd.ShowDialog();
             path.Text = fbd.SelectedPath;
-            if (String.IsNullOrWhiteSpace(path.Text))
-            {
-                return;
-            }
-            else
-            {
-                showReports.IsEnabled = true;
-                saveToCSV.IsEnabled = true;
-                CollectFiles cf = new CollectFiles();
-                allFiles = cf.CollectAllFiles(path.Text.ToString().Replace("\\", "/"));
-                cf.MakeSummary();
-            }
         }
         private void errors_Checked(object sender, RoutedEventArgs e)
         {
@@ -93,6 +81,22 @@ namespace ReportManager
                 Close();
             }
             else System.Windows.Forms.MessageBox.Show("Report is not selected!", ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void openFolder_Click(object sender, RoutedEventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(path.Text))
+            {
+                return;
+            }
+            else
+            {
+                showReports.IsEnabled = true;
+                saveToCSV.IsEnabled = true;
+                CollectFiles cf = new CollectFiles();
+                allFiles = cf.CollectAllFiles(path.Text.ToString().Replace("\\", "/"));
+                cf.MakeSummary();
+            }
         }
     }
 }
