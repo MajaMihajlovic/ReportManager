@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Forms;
@@ -8,7 +7,7 @@ namespace ReportManager
 {
     public partial class MainWindow : Window
     {
-        private List<string> reportTypes = new List<string>();
+        private HashSet<string> reportTypes = new HashSet<string>();
         private static string  WARNING="warnings";
         private static string ERROR = "errors";
         private static string STATISTICS = "statistics";
@@ -66,17 +65,19 @@ namespace ReportManager
                     IEnumerable<ErrorRecord> errorRecords = new ErrorReport().MakeErrors(allFiles);
                     sqlWriter.WriteRecords(ERROR, errorRecords);
                 }
-                else if (reportTypes.Contains(STATISTICS))
+
+                if (reportTypes.Contains(STATISTICS))
                 {
                     List<StatisticRecord> statisticRecords = new StatisticReport().MakeStatistics(allFiles);
                     sqlWriter.WriteStatistics(STATISTICS, statisticRecords);
                 }
-                else if (reportTypes.Contains(WARNING))
+
+                if (reportTypes.Contains(WARNING))
                 {
                    IEnumerable<WarningRecord> warningRecords = new WarningReport().MakeWarnings(allFiles);
                    sqlWriter.WriteRecords(WARNING, warningRecords);
                 }
-                Reports reports = new Reports(reportTypes);
+                Reports reports = new Reports(new List<string>(reportTypes));
                 reports.Show();
                 Close();
             }
