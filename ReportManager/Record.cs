@@ -2,7 +2,7 @@
 {
     public class Record
     {
-        protected string circuitName;
+        protected string circuitName { get; private set; }
         protected string log;
         protected string date;
         protected string fileState;

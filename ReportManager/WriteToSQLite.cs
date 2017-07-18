@@ -8,18 +8,10 @@ namespace ReportManager
         private SQLiteConnection sqlite_conn;
         private SQLiteCommand sqlite_cmd = new SQLiteCommand();
 
-        public void WriteToDatabase(List<StatisticRecord> statisticRecords, IEnumerable<WarningRecord> warningRecords, IEnumerable<ErrorRecord> errorRecords)
+        public void WriteStatistics(string tableName, IEnumerable<StatisticRecord> statisticRecord)
         {
             sqlite_conn = new SQLiteConnection("Data Source=database.db" + ";Version=3;New=True;Compress=True;");
             sqlite_conn.Open();
-            WriteStatistics("statistics", statisticRecords);
-            WriteRecords("errors",warningRecords);
-            WriteRecords("warnings", errorRecords);
-            sqlite_conn.Close();
-        }
-
-        private void WriteStatistics(string tableName, IEnumerable<StatisticRecord> statisticRecord)
-        {
             sqlite_cmd = new SQLiteCommand("DROP TABLE IF EXISTS "+tableName, sqlite_conn);
             sqlite_cmd.ExecuteNonQuery();
             sqlite_cmd.CommandText = "CREATE TABLE "+tableName+" (Circuit string, ErrorCount int ,WarningCount int , SignalsCount int,Status varchar(255),ProcessDate varchar(255),LogDirectory varchar(255));";
@@ -50,9 +42,12 @@ namespace ReportManager
                 }
                 transaction.Commit();
             }
+            sqlite_conn.Close();
         }
-        private void WriteRecords(string tableName, IEnumerable<Record> warningRecords)
+        public void WriteRecords(string tableName, IEnumerable<Record> warningRecords)
         {
+            sqlite_conn = new SQLiteConnection("Data Source=database.db" + ";Version=3;New=True;Compress=True;");
+            sqlite_conn.Open();
             sqlite_cmd = new SQLiteCommand("DROP TABLE IF EXISTS " + tableName, sqlite_conn);
             sqlite_cmd.ExecuteNonQuery();
             sqlite_cmd.CommandText = "CREATE TABLE " + tableName + " (Circuit string , FileContent string,File varchar(255),Date varchar(255),FileState varchar(255),LogDirectory varchar(255));";
@@ -89,6 +84,7 @@ namespace ReportManager
                 }
                 transaction.Commit();
             }
+            sqlite_conn.Close();
         }
     }
 }

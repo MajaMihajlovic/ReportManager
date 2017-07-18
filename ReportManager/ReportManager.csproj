@@ -40,6 +40,10 @@
     <ApplicationIcon>Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AdvancedDataGridView, Version=0.1.0.10, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ADGV.0.1.0.10\lib\net40\AdvancedDataGridView.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -86,12 +90,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CollectFiles.cs" />
     <Compile Include="Diagram.xaml.cs">
       <DependentUpon>Diagram.xaml</DependentUpon>
     </Compile>
     <Compile Include="ErrorRecord.cs" />
-    <Compile Include="PrepareData.cs" />
+    <Compile Include="ErrorReport.cs" />
     <Compile Include="Record.cs" />
+    <Compile Include="Report.cs" />
     <Compile Include="Reports.xaml.cs">
       <DependentUpon>Reports.xaml</DependentUpon>
     </Compile>
@@ -101,8 +107,13 @@
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
     <Compile Include="StatisticRecord.cs" />
+    <Compile Include="StatisticReport.cs" />
     <Compile Include="Summary.cs" />
     <Compile Include="WarningRecord.cs" />
+    <Compile Include="WarningReport.cs" />
+    <Compile Include="Window1.xaml.cs">
+      <DependentUpon>Window1.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WriteToCSV.cs" />
     <Compile Include="WriteToSQLite.cs" />
     <Page Include="Diagram.xaml">
@@ -126,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

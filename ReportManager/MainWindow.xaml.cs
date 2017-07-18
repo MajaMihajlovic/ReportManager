@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Forms;
@@ -8,54 +9,90 @@ namespace ReportManager
     public partial class MainWindow : Window
     {
         private List<string> reportTypes = new List<string>();
-        public PrepareData helper = new PrepareData();
+        private static string  WARNING="warnings";
+        private static string ERROR = "errors";
+        private static string STATISTICS = "statistics";
+        private List<string> allFiles;
+        private string _pathForSaving;
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-            var fbd = new FolderBrowserDialog();
-            DialogResult result =fbd.ShowDialog();
-            textBox.Text = fbd.SelectedPath;     
-        }
-
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
-            if (!String.IsNullOrEmpty(textBox.Text))
-            {
-                if (errors.IsChecked.Value || statistics.IsChecked.Value || warnings.IsChecked.Value)
-                {
-                    var sqlWriter = new WriteToSQLite();
-                    helper.ReadFiles(textBox.Text.ToString().Replace("\\", "/"));
-                    helper.MakeSummary();
-                    List<StatisticRecord> statisticRecords= helper.MakeStatistics();
-                    List<WarningRecord> warningRecords = helper.MakeWarnings();
-                    List<ErrorRecord> errorRecords = helper.MakeErrors();
-                    sqlWriter.WriteToDatabase(statisticRecords,warningRecords,errorRecords);
-                    Reports reports = new Reports(reportTypes, helper);
-                    reports.Show();
-                    Close();
-                }
-                else System.Windows.Forms.MessageBox.Show("Report is not selected!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else System.Windows.Forms.MessageBox.Show("Please choose folder!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            reportTypes.Add("ERRORS");
-        }
-
         private void warnings_Checked(object sender, RoutedEventArgs e)
         {
-            reportTypes.Add("WARNINGS");
+            reportTypes.Add(WARNING);
         }
 
         private void Statistics_Checked(object sender, RoutedEventArgs e)
         {
-            reportTypes.Add("STATISTICS");
+            reportTypes.Add(STATISTICS);
+        }
+
+        private void saveToCSV_Click(object sender, RoutedEventArgs e)
+        {
+            var fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
+            {
+                return;
+            }
+            _pathForSaving = fbd.SelectedPath.Replace("\\", "/");
+            var csvWriter = new WriteToCSV();
+            csvWriter.WriteWarningRecords(new WarningReport().MakeWarnings(allFiles), _pathForSaving);
+            csvWriter.WriteErrorRecords(new ErrorReport().MakeErrors(allFiles), _pathForSaving);
+            csvWriter.WriteStatisticRecords(new StatisticReport().MakeStatistics(allFiles), _pathForSaving);
+            System.Windows.Forms.MessageBox.Show("Reports are saved!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void browseButtonClick(object sender, RoutedEventArgs e)
+        {
+            var fbd = new FolderBrowserDialog();
+            fbd.ShowDialog();
+            path.Text = fbd.SelectedPath;
+            if (String.IsNullOrWhiteSpace(path.Text))
+            {
+                return;
+            }
+            else
+            {
+                showReports.IsEnabled = true;
+                saveToCSV.IsEnabled = true;
+                CollectFiles cf = new CollectFiles();
+                allFiles = cf.CollectAllFiles(path.Text.ToString().Replace("\\", "/"));
+                cf.MakeSummary();
+            }
+        }
+        private void errors_Checked(object sender, RoutedEventArgs e)
+        {
+            reportTypes.Add(ERROR);
+        }
+
+        private void showReports_Click(object sender, RoutedEventArgs e)
+        {
+            if (errors.IsChecked.Value || statistics.IsChecked.Value || warnings.IsChecked.Value)
+            {
+                var sqlWriter = new WriteToSQLite();
+                if (reportTypes.Contains(ERROR))
+                {
+                    IEnumerable<ErrorRecord> errorRecords = new ErrorReport().MakeErrors(allFiles);
+                    sqlWriter.WriteRecords(ERROR, errorRecords);
+                }
+                else if (reportTypes.Contains(STATISTICS))
+                {
+                    List<StatisticRecord> statisticRecords = new StatisticReport().MakeStatistics(allFiles);
+                    sqlWriter.WriteStatistics(STATISTICS, statisticRecords);
+                }
+                else if (reportTypes.Contains(WARNING))
+                {
+                   IEnumerable<WarningRecord> warningRecords = new WarningReport().MakeWarnings(allFiles);
+                   sqlWriter.WriteRecords(WARNING, warningRecords);
+                }
+                Reports reports = new Reports(reportTypes);
+                reports.Show();
+                Close();
+            }
+            else System.Windows.Forms.MessageBox.Show("Report is not selected!", ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }
