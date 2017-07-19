@@ -1,4 +1,4 @@
-﻿namespace ReportManager
+﻿namespace ReportManager.Model
 {
     public class Record
     {

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ReportManager
+namespace ReportManager.Model
 {
-   public class Report
+    public class Report
     {
   
     public string GetFileState(string log, string s)

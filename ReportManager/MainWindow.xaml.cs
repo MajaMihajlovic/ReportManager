@@ -1,4 +1,5 @@
-﻿
+﻿using ReportManager.LogImporting;
+using ReportManager.Model;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -8,7 +9,7 @@ namespace ReportManager
 {
     public partial class MainWindow : Window
     {
-        private List<string> reportTypes = new List<string>();
+        private HashSet<string> reportTypes = new HashSet<string>();
         private static string  WARNING="warnings";
         private static string ERROR = "errors";
         private static string STATISTICS = "statistics";
@@ -50,18 +51,6 @@ namespace ReportManager
             var fbd = new FolderBrowserDialog();
             fbd.ShowDialog();
             path.Text = fbd.SelectedPath;
-            if (String.IsNullOrWhiteSpace(path.Text))
-            {
-                return;
-            }
-            else
-            {
-                showReports.IsEnabled = true;
-                saveToCSV.IsEnabled = true;
-                CollectFiles cf = new CollectFiles();
-                allFiles = cf.CollectAllFiles(path.Text.ToString().Replace("\\", "/"));
-                cf.MakeSummary();
-            }
         }
         private void errors_Checked(object sender, RoutedEventArgs e)
         {
@@ -72,27 +61,43 @@ namespace ReportManager
         {
             if (errors.IsChecked.Value || statistics.IsChecked.Value || warnings.IsChecked.Value)
             {
-                var sqlWriter = new WriteToSQLite();
-                if (reportTypes.Contains(ERROR))
-                {
-                    IEnumerable<ErrorRecord> errorRecords = new ErrorReport().MakeErrors(allFiles);
-                    sqlWriter.WriteRecords(ERROR, errorRecords);
-                }
-                else if (reportTypes.Contains(STATISTICS))
-                {
-                    List<StatisticRecord> statisticRecords = new StatisticReport().MakeStatistics(allFiles);
-                    sqlWriter.WriteStatistics(STATISTICS, statisticRecords);
-                }
-                else if (reportTypes.Contains(WARNING))
-                {
-                   IEnumerable<WarningRecord> warningRecords = new WarningReport().MakeWarnings(allFiles);
-                   sqlWriter.WriteRecords(WARNING, warningRecords);
-                }
-                Reports reports = new Reports(reportTypes);
+                Reports reports = new Reports(new List<string>(reportTypes));
                 reports.Show();
                 Close();
             }
             else System.Windows.Forms.MessageBox.Show("Report is not selected!", ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void importFolder_Click(object sender, RoutedEventArgs e)
+        {
+            importFolder.IsEnabled = false;
+            try
+            {
+                // Todo: Check whether we can move code below
+                CollectFiles cf = new CollectFiles();
+                allFiles = cf.CollectAllFiles(path.Text.ToString().Replace("\\", "/"));
+                cf.MakeSummary();
+
+                // Just save the records to the database
+                var sqlWriter = new WriteToSQLite();
+                IEnumerable<ErrorRecord> errorRecords = new ErrorReport().MakeErrors(allFiles);
+                sqlWriter.WriteRecords(ERROR, errorRecords);
+                List<StatisticRecord> statisticRecords = new StatisticReport().MakeStatistics(allFiles);
+                sqlWriter.WriteStatistics(STATISTICS, statisticRecords);
+                IEnumerable<WarningRecord> warningRecords = new WarningReport().MakeWarnings(allFiles);
+                sqlWriter.WriteRecords(WARNING, warningRecords);
+            }
+            finally
+            {
+                importFolder.IsEnabled = true;
+            }
+
+            System.Windows.MessageBox.Show("All data imported!", "Imported completed", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void path_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            importFolder.IsEnabled = System.IO.Directory.Exists(path.Text);
         }
     }
 }

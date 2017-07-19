@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ReportManager
+namespace ReportManager.Model
 {
-     public class WarningReport:Report
+    public class WarningReport:Report
     {
         public List<WarningRecord> MakeWarnings(List<string> allFiles)
         {
