@@ -10,6 +10,7 @@ namespace ReportManager
     public partial class MainWindow : Window
     {
         private HashSet<string> reportTypes = new HashSet<string>();
+        private CollectFiles cf;
         private static string  WARNING="warnings";
         private static string ERROR = "errors";
         private static string STATISTICS = "statistics";
@@ -39,10 +40,11 @@ namespace ReportManager
                 return;
             }
             _pathForSaving = fbd.SelectedPath.Replace("\\", "/");
-            var csvWriter = new WriteToCSV();
-            csvWriter.WriteWarningRecords(new WarningReport().MakeWarnings(allFiles), _pathForSaving);
-            csvWriter.WriteErrorRecords(new ErrorReport().MakeErrors(allFiles), _pathForSaving);
-            csvWriter.WriteStatisticRecords(new StatisticReport().MakeStatistics(allFiles), _pathForSaving);
+            var csvWriter = new CSVWriter();
+            var sqlReader = new SQLiteReader();
+            csvWriter.CreateCSVFile(sqlReader.GetTable(WARNING), _pathForSaving);
+            csvWriter.CreateCSVFile(sqlReader.GetTable(ERROR), _pathForSaving);
+            csvWriter.CreateCSVFile(sqlReader.GetTable(STATISTICS), _pathForSaving);
             System.Windows.Forms.MessageBox.Show("Reports are saved!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -50,7 +52,14 @@ namespace ReportManager
         {
             var fbd = new FolderBrowserDialog();
             fbd.ShowDialog();
-            path.Text = fbd.SelectedPath;
+            if (fbd.SelectedPath.Contains("Reports"))
+            {
+                path.Text = fbd.SelectedPath;
+                cf = new CollectFiles();
+                allFiles = cf.CollectAllFiles(path.Text.ToString().Replace("\\", "/"));
+            }
+            else System.Windows.MessageBox.Show("Wrong directory, please check READ ME file.");
+  
         }
         private void errors_Checked(object sender, RoutedEventArgs e)
         {
@@ -61,7 +70,7 @@ namespace ReportManager
         {
             if (errors.IsChecked.Value || statistics.IsChecked.Value || warnings.IsChecked.Value)
             {
-                Reports reports = new Reports(new List<string>(reportTypes));
+                var reports = new Reports(new List<string>(reportTypes));
                 reports.Show();
                 Close();
             }
@@ -73,19 +82,15 @@ namespace ReportManager
             importFolder.IsEnabled = false;
             try
             {
-                // Todo: Check whether we can move code below
-                CollectFiles cf = new CollectFiles();
-                allFiles = cf.CollectAllFiles(path.Text.ToString().Replace("\\", "/"));
-                cf.MakeSummary();
-
-                // Just save the records to the database
-                var sqlWriter = new WriteToSQLite();
+                var sqlWriter = new SQLiteWriter();
                 IEnumerable<ErrorRecord> errorRecords = new ErrorReport().MakeErrors(allFiles);
                 sqlWriter.WriteRecords(ERROR, errorRecords);
                 List<StatisticRecord> statisticRecords = new StatisticReport().MakeStatistics(allFiles);
                 sqlWriter.WriteStatistics(STATISTICS, statisticRecords);
                 IEnumerable<WarningRecord> warningRecords = new WarningReport().MakeWarnings(allFiles);
                 sqlWriter.WriteRecords(WARNING, warningRecords);
+                Summary summary = cf.MakeSummary();
+                sqlWriter.WriteSummary(summary);
             }
             finally
             {

@@ -49,10 +49,10 @@ namespace ReportManager.LogImporting
             }
             _numerOfFiles = _numberOfInvalidExtracts + _numberOfInvalidChangesets;
         }
-        public void MakeSummary()
+        public Summary MakeSummary()
         {
-            Summary sum = new Summary(_numerOfFiles, _numberOfInvalidExtracts, _numberOfInvalidChangesets);
-            sum.WriteToFile(_pathToSum);
+            return new Summary(_numerOfFiles, _numberOfInvalidExtracts, _numberOfInvalidChangesets);
+            //sum.WriteToFile(_pathToSum);
         }
     }
 }

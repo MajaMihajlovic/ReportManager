@@ -24,7 +24,7 @@ namespace ReportManager.Model
                     }
                     catch (IOException ex)
                     {
-                        MessageBox.Show(ex.StackTrace, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     string line = null;
                     while ((line = file.ReadLine()) != null)

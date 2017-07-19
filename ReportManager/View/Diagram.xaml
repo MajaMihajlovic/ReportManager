@@ -8,7 +8,7 @@
 xmlns:DVC="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         
         mc:Ignorable="d"
-        Title="ReportManager" Height="326" Width="434.606" ResizeMode="NoResize" Icon="Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico">
+        Title="ReportManager" Height="326" Width="434.606" ResizeMode="NoResize" Icon="../icons/Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico">
     <Grid Margin="38,0,24,-12">
         <Grid.RowDefinitions>
             <RowDefinition Height="137"/>

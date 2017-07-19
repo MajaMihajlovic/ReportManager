@@ -7,7 +7,7 @@ namespace ReportManager.Model
     {
         public List<WarningRecord> MakeWarnings(List<string> allFiles)
         {
-            string fileType = "CIMToDMSTranformReports";
+            var fileType = "CIMToDMSTranformReports";
             var warningRecords = new List<WarningRecord>();
             foreach (string s in allFiles)
             {

@@ -37,7 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico</ApplicationIcon>
+    <ApplicationIcon>icons\Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AdvancedDataGridView, Version=0.1.0.10, Culture=neutral, processorArchitecture=MSIL">
@@ -86,61 +86,48 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <ApplicationDefinition Include="View\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="IVisitor.cs" />
     <Compile Include="LogImporting\CollectFiles.cs" />
-    <Compile Include="Diagram.xaml.cs">
+    <Compile Include="SQLiteReader.cs" />
+    <Compile Include="SQLiteVisitor.cs" />
+    <Compile Include="View\Diagram.xaml.cs">
       <DependentUpon>Diagram.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\ErrorRecord.cs" />
-    <Compile Include="Model\ErrorReport.cs" />
-    <Compile Include="Model\Record.cs" />
-    <Compile Include="Model\Report.cs" />
-    <Compile Include="Reports.xaml.cs">
+    <Compile Include="Model\Record\ErrorRecord.cs" />
+    <Compile Include="Model\Report\ErrorReport.cs" />
+    <Compile Include="Model\Record\Record.cs" />
+    <Compile Include="Model\Report\Report.cs" />
+    <Compile Include="View\Reports.xaml.cs">
       <DependentUpon>Reports.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Resource1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource1.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StatisticRecord.cs" />
-    <Compile Include="Model\StatisticReport.cs" />
-    <Compile Include="Summary.cs" />
-    <Compile Include="Model\WarningRecord.cs" />
-    <Compile Include="Model\WarningReport.cs" />
-    <Compile Include="Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WriteToCSV.cs" />
-    <Compile Include="WriteToSQLite.cs" />
-    <Page Include="Diagram.xaml">
+    <Compile Include="Model\Record\StatisticRecord.cs" />
+    <Compile Include="Model\Report\StatisticReport.cs" />
+    <Compile Include="LogImporting\Summary.cs" />
+    <Compile Include="Model\Record\WarningRecord.cs" />
+    <Compile Include="Model\Report\WarningReport.cs" />
+    <Compile Include="CSVWriter.cs" />
+    <Compile Include="SQLiteWriter.cs" />
+    <Page Include="View\Diagram.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
+    <Compile Include="View\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Reports.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ResourceDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Window1.xaml">
+    <Page Include="View\Reports.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -163,10 +150,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resource1.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -178,13 +161,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico" />
+    <Resource Include="icons\Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images.jpg" />
+    <Resource Include="icons\images.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="if_file_documents-11_854152.png" />
+    <Resource Include="icons\if_file_documents-11_854152.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

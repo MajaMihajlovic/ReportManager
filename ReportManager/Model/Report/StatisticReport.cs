@@ -24,7 +24,7 @@ namespace ReportManager.Model
                     }
                     catch (IOException ex)
                     {
-                        MessageBox.Show(ex.StackTrace, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     string line = null;
                     int lineNumber = 0;
@@ -33,11 +33,25 @@ namespace ReportManager.Model
                         lineNumber++;
                         if (lineNumber == 4)
                         {
-                            errorCount = Int32.Parse(line.Split(':')[1]);
+                            if (line.Contains(":"))
+                            {
+                                errorCount = Int32.Parse(line.Split(':')[1]);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Unexpected file content!","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+                            }
                         }
                         else if (lineNumber == 5)
                         {
-                            warningCount = Int32.Parse(line.Split(':')[1]);
+                            if (line.Contains(":"))
+                            {
+                                warningCount = Int32.Parse(line.Split(':')[1]);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Unexpected file content!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
                         }
                     }
                     file.Close();

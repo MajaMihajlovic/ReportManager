@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReportManager"
         mc:Ignorable="d"
-        Title="Reports" Height="512.113" Width="821.338" Icon="Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico" Closing="Window_Closing" ResizeMode="CanResizeWithGrip">
+        Title="Reports" Height="512.113" Width="821.338" Icon="../icons/Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico" Closing="Window_Closing" ResizeMode="CanResizeWithGrip">
     <Grid Margin="10,0,0,5">
         <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="417" Margin="0,6,0,0" VerticalAlignment="Top" Width="788">
             <TabItem x:Name="tabStatistics" Header="Statistics" Visibility="Visible" IsEnabled="False">
@@ -16,12 +16,12 @@
                         <ColumnDefinition Width="34*"/>
                         <ColumnDefinition Width="546*"/>
                     </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="dataGridStatistics" HorizontalAlignment="Left" Height="393" Margin="0,-1,-123,-3" VerticalAlignment="Top" Width="792" IsReadOnly="True" ColumnWidth="150" Grid.ColumnSpan="4"/>
+                    <DataGrid x:Name="dataGridStatistics" HorizontalAlignment="Left" Height="393" Margin="0,-1,-123,-3" VerticalAlignment="Top" Width="792" IsReadOnly="True" ColumnWidth="150" Grid.ColumnSpan="4" SelectionUnit="Cell" MouseDoubleClick="dataGridStatistics_MouseDoubleClick"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabErrors" Header="Errors" Visibility="Visible" IsEnabled="False" AllowDrop="True">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGridErrors" HorizontalAlignment="Left" Height="393" Margin="0,-1,0,-3" VerticalAlignment="Top" Width="782" IsReadOnly="True" ColumnWidth="150"/>
+                    <DataGrid x:Name="dataGridErrors" HorizontalAlignment="Left" Height="393" Margin="0,-1,0,-3" VerticalAlignment="Top" Width="782" IsReadOnly="True" ColumnWidth="150" MouseDoubleClick="dataGridErrors_MouseDoubleClick" SelectionUnit="Cell"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabWarnings" Header="Warnings" Margin="-2,-2,-2,0" Visibility="Visible" IsEnabled="False">
@@ -30,10 +30,12 @@
                         <ColumnDefinition Width="29*"/>
                         <ColumnDefinition Width="640*"/>
                     </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="dataGridWarnings" HorizontalAlignment="Left" Height="393" Margin="0,-1,-2,-3" VerticalAlignment="Top" Width="784" IsReadOnly="True" ColumnWidth="150" Grid.ColumnSpan="2"/>
+                    <DataGrid x:Name="dataGridWarnings" HorizontalAlignment="Left" Height="393" Margin="0,-1,-2,-3" VerticalAlignment="Top" Width="784" IsReadOnly="True" ColumnWidth="150" Grid.ColumnSpan="2" SelectionUnit="Cell" MouseDoubleClick="dataGridWarnings_MouseDoubleClick"/>
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="showDiagram" Content="Show diagram" HorizontalAlignment="Left" Margin="351,441,0,0" VerticalAlignment="Top" Width="100" Click="ShowDiagramClick"/>
+        <Button x:Name="showDiagram" Content="Show diagram" HorizontalAlignment="Left" Margin="673,442,0,0" VerticalAlignment="Top" Width="100" Click="ShowDiagramClick"/>
+        <TextBox x:Name="selectedValue" HorizontalAlignment="Left" Height="26" Margin="217,441,0,0" Text="&#xD;&#xA;" VerticalAlignment="Top" Width="247"/>
+        <Button x:Name="filter" Content="Filter" HorizontalAlignment="Left" Height="22" Margin="481,442,0,0" VerticalAlignment="Top" Width="91" Click="filter_Click"/>
     </Grid>
 </Window>
