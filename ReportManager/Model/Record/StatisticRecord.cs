@@ -3,22 +3,18 @@ using System.Data.SQLite;
 
 namespace ReportManager.Model
 {
-    public class StatisticRecord: Record
+    public class StatisticRecord:Record
     {
-        public int ErrorCount { get; private set; }
-        public int WarningCount { get; private set; }
-        public int SignalsCount { get; private set; }
+        public int ErrorCount { get; set; }
+        public int WarningCount { get; set; }
+        public int SignalsCount { get; set; }
+        public string Path { get; set; }
 
-        public StatisticRecord(string circuitName, string log, string date, int errorCount, int warningCount, string fileState) : base(circuitName, log, date, fileState)
-        {
-            ErrorCount = errorCount;
-            WarningCount = warningCount;
-            SignalsCount = 0;
-        }
+        public StatisticRecord(string path) : base(path) { }
 
-        public override void Accept(IVisitor visitor, SQLiteCommand sqlite_cmd)
+        public override void Accept(IVisitor visitor, SQLiteCommand sqlite_cmd,string tableName)
         {
-            visitor.Visit(this,sqlite_cmd);
+            visitor.Visit(this,sqlite_cmd,tableName);
         }
     }
 }

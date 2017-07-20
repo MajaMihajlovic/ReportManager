@@ -1,5 +1,6 @@
 ﻿using ReportManager.LogImporting;
 using ReportManager.Model;
+using ReportManager.Model.Report;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -83,11 +84,11 @@ namespace ReportManager
             try
             {
                 var sqlWriter = new SQLiteWriter();
-                IEnumerable<ErrorRecord> errorRecords = new ErrorReport().MakeErrors(allFiles);
+                IEnumerable<Record> errorRecords = new ErrorReport().MakeRecords(allFiles);
                 sqlWriter.WriteRecords(ERROR, errorRecords);
-                List<StatisticRecord> statisticRecords = new StatisticReport().MakeStatistics(allFiles);
+                List<Record> statisticRecords = new StatisticReport().MakeRecords(allFiles);
                 sqlWriter.WriteStatistics(STATISTICS, statisticRecords);
-                IEnumerable<WarningRecord> warningRecords = new WarningReport().MakeWarnings(allFiles);
+                IEnumerable<Record> warningRecords = new WarningReport().MakeRecords(allFiles);
                 sqlWriter.WriteRecords(WARNING, warningRecords);
                 Summary summary = cf.MakeSummary();
                 sqlWriter.WriteSummary(summary);

@@ -4,19 +4,16 @@ namespace ReportManager.Model
 {
     public abstract class Record
     {
-        public string CircuitName { get; private set; }
-        public string Log { get; private set; }
-        public string Date { get; private set; }
-        public string FileState { get; private set; }
+        public string CircuitName { get;  set; }
+        public string LogDirectory { get; set; }
+        public string Date { get; set; }
+        public string FileState { get; set; }
 
-        public abstract void Accept(IVisitor visitor, SQLiteCommand sqlite_cmd);
+        public abstract void Accept(IVisitor visitor, SQLiteCommand sqlite_cmd, string tableName);
 
-        public Record(string circuitName, string log, string date, string fileState)
+        public Record(string path)
         {
-            CircuitName = circuitName;
-            Log = log;
-            Date = date;
-            FileState = fileState;
+            string _path = path;
         }
     }
 }

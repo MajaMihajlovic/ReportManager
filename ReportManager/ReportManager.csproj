@@ -67,6 +67,7 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.105.2\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Controls.DataVisualization.Toolkit, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Windows.Controls.DataVisualization.Toolkit.4.0.0.0\lib\net40-Client\System.Windows.Controls.DataVisualization.Toolkit.dll</HintPath>
       <Private>True</Private>
@@ -90,14 +91,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="IVisitor.cs" />
+    <Compile Include="Builder\Director.cs" />
+    <Compile Include="Builder\IRecordBuilder.cs" />
+    <Compile Include="Builder\IStatisticRecordBuilder.cs" />
+    <Compile Include="Builder\IWarningErroRecordBuilder.cs" />
+    <Compile Include="Builder\RecordBuilder.cs" />
+    <Compile Include="Builder\StatisticRecordBuilder.cs" />
+    <Compile Include="Builder\WarningErrorRecordBuilder.cs" />
+    <Compile Include="Model\Record\WarningErrorRecord.cs" />
+    <Compile Include="Visitor\IVisitor.cs" />
     <Compile Include="LogImporting\CollectFiles.cs" />
-    <Compile Include="SQLiteReader.cs" />
-    <Compile Include="SQLiteVisitor.cs" />
+    <Compile Include="Reading\SQLiteReader.cs" />
+    <Compile Include="Visitor\SQLiteVisitor.cs" />
     <Compile Include="View\Diagram.xaml.cs">
       <DependentUpon>Diagram.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\Record\ErrorRecord.cs" />
     <Compile Include="Model\Report\ErrorReport.cs" />
     <Compile Include="Model\Record\Record.cs" />
     <Compile Include="Model\Report\Report.cs" />
@@ -107,10 +115,13 @@
     <Compile Include="Model\Record\StatisticRecord.cs" />
     <Compile Include="Model\Report\StatisticReport.cs" />
     <Compile Include="LogImporting\Summary.cs" />
-    <Compile Include="Model\Record\WarningRecord.cs" />
     <Compile Include="Model\Report\WarningReport.cs" />
-    <Compile Include="CSVWriter.cs" />
-    <Compile Include="SQLiteWriter.cs" />
+    <Compile Include="Writing\CSVWriter.cs" />
+    <Compile Include="Writing\SQLiteWriter.cs" />
+    <Page Include="MyResource\myStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Diagram.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

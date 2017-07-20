@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ReportManager.LogImporting
@@ -11,13 +8,10 @@ namespace ReportManager.LogImporting
     public class CollectFiles
     {
         private List<string> allFiles=new List<string>();
-        private int _numerOfFiles;
+        private int _numberOfFiles;
         private int _numberOfInvalidChangesets;
         private int _numberOfInvalidExtracts;
-        private string _pathToSum = "Summary.csv";
         private string _path;
-
-        public object CotextBox { get; internal set; }
 
         public List<string> CollectAllFiles(string path)
         {
@@ -47,12 +41,11 @@ namespace ReportManager.LogImporting
             {
                 ReadFiles(subdir);
             }
-            _numerOfFiles = _numberOfInvalidExtracts + _numberOfInvalidChangesets;
+            _numberOfFiles = _numberOfInvalidExtracts + _numberOfInvalidChangesets;
         }
         public Summary MakeSummary()
         {
-            return new Summary(_numerOfFiles, _numberOfInvalidExtracts, _numberOfInvalidChangesets);
-            //sum.WriteToFile(_pathToSum);
+            return new Summary(_numberOfFiles, _numberOfInvalidExtracts, _numberOfInvalidChangesets);
         }
     }
 }

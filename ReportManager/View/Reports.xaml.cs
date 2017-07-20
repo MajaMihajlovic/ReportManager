@@ -69,13 +69,10 @@ namespace ReportManager
         public string GetSelectedCellValue(DataGridCellInfo cellInfo)
         {
             if (cellInfo == null) return null;
-
             DataGridBoundColumn column = cellInfo.Column as DataGridBoundColumn;
             if (column == null) return null;
-
             FrameworkElement element = new FrameworkElement() { DataContext = cellInfo.Item };
             BindingOperations.SetBinding(element, TagProperty, column.Binding);
-
             return element.Tag.ToString();
         }
 
@@ -95,7 +92,6 @@ namespace ReportManager
         {
             if (tabErrors.IsSelected)
             {
-                MessageBox.Show(errorsTable.Rows[1].ToString());
                //dataGridStatistics.ItemsSource = errorsTable.DefaultView.RowFilter = String.Format("[Circuit] Like {0}", selectedValue.Text);
             }
             else if (tabStatistics.IsSelected)

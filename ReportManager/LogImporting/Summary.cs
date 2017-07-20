@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-
-namespace ReportManager.LogImporting
+﻿namespace ReportManager.LogImporting
 {
     public class Summary
     {
@@ -12,8 +9,8 @@ namespace ReportManager.LogImporting
         public Summary(int numberOfFiles, int numberOfInvalidExtracts, int numberOfInvalidChangesets)
         {
             NumberOfFiles = numberOfFiles;
-            this.NumberOfInvalidChangesets = numberOfInvalidChangesets;
-            this.NumberOfInvalidExtracts = numberOfInvalidExtracts;
+            NumberOfInvalidChangesets = numberOfInvalidChangesets;
+            NumberOfInvalidExtracts = numberOfInvalidExtracts;
         }
         
     }

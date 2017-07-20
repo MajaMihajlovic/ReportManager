@@ -1,63 +1,68 @@
-﻿using System;
+﻿using ReportManager.Builder;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 
-namespace ReportManager.Model
+namespace ReportManager.Model.Report
 {
     public class StatisticReport:Report
     {
-        public List<StatisticRecord> MakeStatistics(List<string> allFiles)
+        public override List<Record> MakeRecords(List<string> allFiles)
         {
+
+            Director director = new Director();
             string fileType = "CIMToDMSTranformReports";
-            List<StatisticRecord> statisticRecords = new List<StatisticRecord>();
+            List<Record> statisticRecords = new List<Record>();
             foreach (string s in allFiles)
             {
                 if (s.Contains(fileType))
                 {
                     int errorCount = 0;
                     int warningCount = 0;
-                    StreamReader file = null;
                     try
                     {
-                        file = new StreamReader(s);
+                        using (StreamReader file = new StreamReader(s))
+                        {
+                            string line = null;
+                            int lineNumber = 0;
+                            while ((line = file.ReadLine()) != null)
+                            {
+                                lineNumber++;
+                                if (lineNumber == 4)
+                                {
+                                    if (line.Contains(":"))
+                                    {
+                                        errorCount = Int32.Parse(line.Split(':')[1]);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Unexpected file content!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                }
+                                else if (lineNumber == 5)
+                                {
+                                    if (line.Contains(":"))
+                                    {
+                                        warningCount = Int32.Parse(line.Split(':')[1]);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Unexpected file content!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                }
+                            }
+                        }
                     }
                     catch (IOException ex)
                     {
                         MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-                    string line = null;
-                    int lineNumber = 0;
-                    while ((line = file.ReadLine()) != null)
-                    {
-                        lineNumber++;
-                        if (lineNumber == 4)
-                        {
-                            if (line.Contains(":"))
-                            {
-                                errorCount = Int32.Parse(line.Split(':')[1]);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Unexpected file content!","Error",MessageBoxButton.OK,MessageBoxImage.Error);
-                            }
-                        }
-                        else if (lineNumber == 5)
-                        {
-                            if (line.Contains(":"))
-                            {
-                                warningCount = Int32.Parse(line.Split(':')[1]);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Unexpected file content!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                            }
-                        }
+
+                    var staticticBuilder = new StatisticRecordBuilder(s);
+                    director.Construct(staticticBuilder, warningCount,errorCount);
+                    statisticRecords.Add(staticticBuilder.StatisticRecord);
                     }
-                    file.Close();
-                    var statistics = new StatisticRecord(GetCircuitName(s), GetLogDirectory(s), GetDate(s), errorCount, warningCount, GetFileState(GetLogDirectory(s), s));
-                    statisticRecords.Add(statistics);
-                }
             }
             return statisticRecords;
         }

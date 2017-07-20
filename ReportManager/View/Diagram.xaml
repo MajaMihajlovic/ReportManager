@@ -9,14 +9,14 @@ xmlns:DVC="clr-namespace:System.Windows.Controls.DataVisualization.Charting;asse
         
         mc:Ignorable="d"
         Title="ReportManager" Height="326" Width="434.606" ResizeMode="NoResize" Icon="../icons/Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico">
-    <Grid Margin="38,0,24,-12">
+    <Grid Margin="28,0,24,-12">
         <Grid.RowDefinitions>
             <RowDefinition Height="137"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <DVC:Chart Name="mcChart" 
-           Width="397" Height="250"
-           Background="LightSteelBlue" Margin="-23,21,-17,36" HorizontalAlignment="Left" Grid.RowSpan="2">
+           Width="405" Height="236"
+           Background="LightSteelBlue" Margin="-19,23,-9,0" HorizontalAlignment="Left" Grid.RowSpan="2" VerticalAlignment="Top">
             <DVC:Chart.Series>
                 <DVC:PieSeries Title="Experience" 
             IndependentValueBinding="{Binding Path=Key}"
