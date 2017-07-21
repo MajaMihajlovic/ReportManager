@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
 namespace ReportManager.LogImporting
@@ -11,6 +12,9 @@ namespace ReportManager.LogImporting
         private int _numberOfFiles;
         private int _numberOfInvalidChangesets;
         private int _numberOfInvalidExtracts;
+        private int _numberOfPendingChangesets;
+        private int _numberOfPendingExtracts;
+        private int _numberOfRejectedChangesets;
         private string _path;
 
         public List<string> CollectAllFiles(string path)
@@ -32,8 +36,11 @@ namespace ReportManager.LogImporting
             }
             foreach (string s in subDirs)
             {
-                if (s.Contains("ChangeSet")) _numberOfInvalidChangesets++;
-                if (s.Contains("Extract")) _numberOfInvalidExtracts++;
+                if (s.Contains("ChangeSet") && s.Contains("Invalid")) _numberOfInvalidChangesets++;
+                if (s.Contains("Extract") && s.Contains("Invalid")) _numberOfInvalidExtracts++;
+                if (s.Contains("ChangeSet") && s.Contains("Pending")) _numberOfPendingChangesets++;
+                if (s.Contains("Extract") && s.Contains("Pending"))  _numberOfPendingExtracts++;
+                    if (s.Contains("ChangeSet") && s.Contains("Rejected")) _numberOfRejectedChangesets++;
             }
             allFiles.AddRange(subDirs);
             allFiles.AddRange(Directory.GetFiles(path));
@@ -41,11 +48,11 @@ namespace ReportManager.LogImporting
             {
                 ReadFiles(subdir);
             }
-            _numberOfFiles = _numberOfInvalidExtracts + _numberOfInvalidChangesets;
+            _numberOfFiles = _numberOfInvalidExtracts + _numberOfInvalidChangesets+ _numberOfInvalidExtracts+ _numberOfInvalidChangesets+ _numberOfRejectedChangesets;
         }
         public Summary MakeSummary()
         {
-            return new Summary(_numberOfFiles, _numberOfInvalidExtracts, _numberOfInvalidChangesets);
+            return new Summary(_numberOfFiles, _numberOfInvalidExtracts, _numberOfInvalidChangesets, _numberOfInvalidChangesets, _numberOfPendingExtracts, _numberOfRejectedChangesets);
         }
     }
 }

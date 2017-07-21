@@ -23,16 +23,6 @@ namespace ReportManager
             InitializeComponent();
         }
 
-        private void warnings_Checked(object sender, RoutedEventArgs e)
-        {
-            reportTypes.Add(WARNING);
-        }
-
-        private void Statistics_Checked(object sender, RoutedEventArgs e)
-        {
-            reportTypes.Add(STATISTICS);
-        }
-
         private void saveToCSV_Click(object sender, RoutedEventArgs e)
         {
             var fbd = new FolderBrowserDialog();
@@ -62,15 +52,14 @@ namespace ReportManager
             else System.Windows.MessageBox.Show("Wrong directory, please check READ ME file.");
   
         }
-        private void errors_Checked(object sender, RoutedEventArgs e)
-        {
-            reportTypes.Add(ERROR);
-        }
 
         private void showReports_Click(object sender, RoutedEventArgs e)
         {
             if (errors.IsChecked.Value || statistics.IsChecked.Value || warnings.IsChecked.Value)
             {
+                if (errors.IsChecked.Value) reportTypes.Add(ERROR);
+                if(statistics.IsChecked.Value) reportTypes.Add(STATISTICS);
+                if (warnings.IsChecked.Value) reportTypes.Add(WARNING);
                 var reports = new Reports(new List<string>(reportTypes));
                 reports.Show();
                 Close();

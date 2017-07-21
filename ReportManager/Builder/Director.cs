@@ -2,22 +2,24 @@
 {
     public class Director
     {
-        public void Construct(IStatisticRecordBuilder recordBuilder,int warningCount,int errorCount)
+        public void Construct(IStatisticRecordBuilder recordBuilder, int warningCount, int errorCount)
         {
-            recordBuilder.BuildCircuitName();
-            recordBuilder.BuildLogDirectory();
-            recordBuilder.BuildDate();
             recordBuilder.BuildSignalsCount();
             recordBuilder.BuildWarningCount(warningCount);
             recordBuilder.BuildErrorCount(errorCount);
         }
+
         public void Contruct(IWarningErroRecordBuilder recordBuilder, string content)
+        {
+            recordBuilder.BuildFileName();
+            recordBuilder.BuildFileContent(content);
+        }
+
+        public void Contruct(IRecordBuilder recordBuilder)
         {
             recordBuilder.BuildCircuitName();
             recordBuilder.BuildLogDirectory();
             recordBuilder.BuildDate();
-            recordBuilder.BuildFileName();
-            recordBuilder.BuildFileContent(content);
         }
     }
 }

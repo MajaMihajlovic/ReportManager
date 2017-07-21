@@ -9,6 +9,7 @@ namespace ReportManager.Model.Report
 {
 public class ErrorReport : Report
 {
+        //get 
 public override List<Record> MakeRecords(List<string> allFiles)
 {
     var errorRecords = new List<Record>();
@@ -48,10 +49,10 @@ public override List<Record> MakeRecords(List<string> allFiles)
                             }
                             if (!String.IsNullOrEmpty(content))
                             {
-
-                                                var warningErorRecordBuilder = new WarningErrorRecordBuilder(s);
-                                                director.Contruct(warningErorRecordBuilder, line);
-                                                errorRecords.Add(warningErorRecordBuilder.WarningErrorRecord);
+                                var warningErorRecordBuilder = new WarningErrorRecordBuilder(s);
+                                director.Contruct(warningErorRecordBuilder);
+                                director.Contruct(warningErorRecordBuilder, line);
+                                errorRecords.Add(warningErorRecordBuilder.WarningErrorRecord);
                             }
                         }
                     }

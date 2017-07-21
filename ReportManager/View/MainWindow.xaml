@@ -5,32 +5,85 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReportManager"
         mc:Ignorable="d"
-        Title="ReportManager" Height="339.856" Width="446.377" Topmost="True" Icon="../icons/Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico" ResizeMode="NoResize">
-    <Grid Margin="0,0,2,-4">
+        Title="ReportManager" Height="428.086" Width="601.377" Topmost="True" Icon="../icons/Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico" ResizeMode="NoResize">
+    <Window.Resources>
+
+        <Style x:Key="btnGlass" TargetType="Button">
+
+            <Setter Property="FontSize" Value="42" />
+            <Setter Property="Foreground" Value="WhiteSmoke" />
+            <Setter Property="Template">
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder" 
+                  CornerRadius="25" 
+                  BorderThickness="4" 
+                  Background="#AA4E4D4D"  
+                  BorderBrush="#99FFFFFF"
+                  RenderTransformOrigin="0.5,0.5">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="1.7*"/>
+                                </Grid.RowDefinitions>
+                                <ContentPresenter x:Name="ButtonContentPresenter"
+                                VerticalAlignment="Center"  
+                                HorizontalAlignment="Center" 
+                                Grid.RowSpan="2" />
+                            </Grid>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform" TargetName="ButtonBorder">
+                                    <Setter.Value>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                                        </TransformGroup>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+    <Grid Margin="0,0,2,0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="18*"/>
-            <RowDefinition Height="17*"/>
+            <RowDefinition Height="71*"/>
+            <RowDefinition Height="62*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="29*"/>
             <ColumnDefinition Width="46*"/>
             <ColumnDefinition Width="143*"/>
         </Grid.ColumnDefinitions>
-        <Label x:Name="label" Content="Welcome " HorizontalAlignment="Left" Height="66" VerticalAlignment="Top" Width="201" FontSize="45" Margin="5,6,0,0" Grid.ColumnSpan="3"/>
-        <Label x:Name="label1" Content="Please choose the folder with files for analysis:" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top" Width="275" Grid.ColumnSpan="3"/>
-        <Button x:Name="browseButton" Content="Browse&#xD;&#xA;" HorizontalAlignment="Left" Height="27" Margin="165,123,0,0" VerticalAlignment="Top" Width="105" Click="browseButtonClick" Grid.Column="2" FontSize="15"/>
-        <TextBox x:Name="path" HorizontalAlignment="Left" Height="27" Margin="12,124,0,0" VerticalAlignment="Top" Width="283" Grid.ColumnSpan="3" TextChanged="path_TextChanged"/>
-        <Label x:Name="label2" Content="Select kind of reports:" HorizontalAlignment="Left" Margin="13,0,0,0" VerticalAlignment="Top" Width="133" Grid.Column="2" Grid.Row="1"/>
-        <Button x:Name="showReports" Content="Show reports" HorizontalAlignment="Left" Height="27" Margin="165,108,0,0" VerticalAlignment="Top" Width="105" Click="showReports_Click" FontSize="15" Grid.Column="2" Grid.Row="1"/>
-        <Image x:Name="image" HorizontalAlignment="Left" Height="137" Margin="5,161,0,0" VerticalAlignment="Top" Width="163" Source="../icons/images.jpg" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
-        <Label x:Name="label3" Content="to Report Manager" HorizontalAlignment="Left" Height="29" Margin="73,42,0,0" VerticalAlignment="Top" Width="194" FontSize="15" FontStyle="Italic" FontWeight="Bold" Grid.Column="2"/>
-        <CheckBox x:Name="errors" Content="Errors" HorizontalAlignment="Left" Margin="21,37,0,0" VerticalAlignment="Top" Height="22" Width="97" Checked="errors_Checked" Grid.Column="2" Grid.Row="1"/>
-        <CheckBox x:Name="warnings" Content="Warnings" HorizontalAlignment="Left" Margin="20,65,0,0" VerticalAlignment="Top" Height="22" Width="97" Checked="warnings_Checked" Grid.Column="2" Grid.Row="1"/>
-        <CheckBox x:Name="statistics" Content="Statistics" HorizontalAlignment="Left" Margin="20,92,0,0" VerticalAlignment="Top" Height="22" Width="97" Checked="Statistics_Checked" Grid.Column="2" Grid.Row="1"/>
-        <Button x:Name="saveToCSV" Content="Save to CSV" Grid.Column="2" HorizontalAlignment="Left" Margin="165,63,0,0" VerticalAlignment="Top" Width="105" Click="saveToCSV_Click" Height="27" FontSize="15" Grid.Row="1"/>
-        <Button x:Name="importFolder" Content="Import to DB" Grid.Column="2" HorizontalAlignment="Left" Margin="165,17,0,0" VerticalAlignment="Top" Width="105" Height="27" Click="importFolder_Click" IsEnabled="False" FontSize="15" Grid.Row="1"/>
-        <Separator Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="11" Margin="3,81,0,0" VerticalAlignment="Top" Width="435"/>
-
+        <Label x:Name="label" Content="Welcome " HorizontalAlignment="Left" Height="88" VerticalAlignment="Top" Width="319" FontSize="65" Margin="13,17,0,0" Grid.ColumnSpan="3" Foreground="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <Label x:Name="label1" Content="Please choose the folder with files for analysis:" HorizontalAlignment="Left" Margin="7,139,0,0" VerticalAlignment="Top" Width="437" Grid.ColumnSpan="3" Foreground="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" FontSize="18" Height="34"/>
+        <Button x:Name="browseButton" Style="{StaticResource btnGlass}" Content="Browse&#xD;&#xA;" HorizontalAlignment="Left" Height="36" Margin="268,171,0,0" VerticalAlignment="Top" Width="106" Click="browseButtonClick" Grid.Column="2" FontSize="18"/>
+        <TextBox x:Name="path" HorizontalAlignment="Left" Height="31" Margin="12,172,0,0" VerticalAlignment="Top" Width="444" Grid.ColumnSpan="3" TextChanged="path_TextChanged" FontSize="18"/>
+        <Label x:Name="label2" Content="Select kind of reports:" HorizontalAlignment="Left" Margin="8,1,0,0" VerticalAlignment="Top" Width="185" Grid.ColumnSpan="2" Foreground="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" FontSize="18" Grid.Row="1" Height="34"/>
+        <Button x:Name="showReports" Style="{StaticResource btnGlass}" Content="Show reports" HorizontalAlignment="Left" Height="41" Margin="14,125,0,0" VerticalAlignment="Top" Width="121" Click="showReports_Click" FontSize="18" Grid.Row="1" Grid.Column="2"/>
+        <Label x:Name="label3" Content="to Report Manager" HorizontalAlignment="Left" Height="43" Margin="117,64,0,0" VerticalAlignment="Top" Width="244" FontSize="20" FontStyle="Italic" FontWeight="Bold" Grid.Column="2" Foreground="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <CheckBox x:Name="errors" Content="Errors" HorizontalAlignment="Left" Margin="16,57,0,0" VerticalAlignment="Top" Height="29" Width="119" Grid.Row="1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Foreground="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" FontSize="18" Grid.Column="2"/>
+        <CheckBox x:Name="warnings" Content="Warnings" HorizontalAlignment="Left" Margin="201,57,0,0" VerticalAlignment="Top" Height="30" Width="115" Grid.Row="1" Foreground="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" FontSize="18" Grid.Column="2"/>
+        <CheckBox x:Name="statistics" Content="Statistics" HorizontalAlignment="Left" Margin="24,56,0,0" VerticalAlignment="Top" Height="30" Width="110" Grid.Row="1" Foreground="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" FontSize="18" Grid.ColumnSpan="2"/>
+        <Button x:Name="saveToCSV" Style="{StaticResource btnGlass}" Content="Save to CSV" Grid.Column="2" HorizontalAlignment="Left" Margin="198,125,0,0" VerticalAlignment="Top" Width="132" Click="saveToCSV_Click" Height="42" FontSize="18" Grid.Row="1"/>
+        <Button x:Name="importFolder" Style="{StaticResource btnGlass}" Content="Import to DB" HorizontalAlignment="Left" Margin="17,124,0,0" VerticalAlignment="Top" Width="127" Height="40" Click="importFolder_Click" IsEnabled="False" FontSize="18" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <Separator Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="17" Margin="4,103,0,0" VerticalAlignment="Top" Width="584"/>
 
     </Grid>
+    <Window.Background>
+        <ImageBrush>
+            <ImageBrush.ImageSource>
+                <BitmapImage UriSource="../icons/background.png"/>
+            </ImageBrush.ImageSource>
+        </ImageBrush>
+    </Window.Background>
 </Window>

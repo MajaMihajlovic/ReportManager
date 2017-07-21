@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Windows;
-using System.Linq;
 using System.Windows.Data;
 using System.Windows.Controls;
 using System;
@@ -18,7 +17,7 @@ namespace ReportManager
         public Reports(List<string> list)
         {
             InitializeComponent();
-            this._reportTypes = list;
+            _reportTypes = list;
             SQLiteReader sqlReader = new SQLiteReader();
             foreach (string s in _reportTypes)
             {
@@ -62,8 +61,11 @@ namespace ReportManager
 
         private void dataGridStatistics_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            DataGridCellInfo cellInfo = dataGridStatistics.SelectedCells[0];
-            selectedValue.Text = GetSelectedCellValue(cellInfo);
+            if (dataGridStatistics.SelectedCells.Count > 0)
+            {
+                DataGridCellInfo cellInfo = dataGridStatistics.SelectedCells[0];
+                selectedValue.Text = GetSelectedCellValue(cellInfo);
+            }
         }
 
         public string GetSelectedCellValue(DataGridCellInfo cellInfo)
@@ -78,29 +80,30 @@ namespace ReportManager
 
         private void dataGridErrors_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            DataGridCellInfo cellInfo = dataGridErrors.SelectedCells[0];
-            selectedValue.Text = GetSelectedCellValue(cellInfo);
+                DataGridCellInfo cellInfo = dataGridErrors.SelectedCells[0];
+                selectedValue.Text = GetSelectedCellValue(cellInfo);
         }
 
         private void dataGridWarnings_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            DataGridCellInfo cellInfo = dataGridWarnings.SelectedCells[0];
-            selectedValue.Text = GetSelectedCellValue(cellInfo);
+                DataGridCellInfo cellInfo = dataGridWarnings.SelectedCells[0];
+                selectedValue.Text = GetSelectedCellValue(cellInfo);
         }
 
         private void filter_Click(object sender, RoutedEventArgs e)
         {
             if (tabErrors.IsSelected)
             {
-               //dataGridStatistics.ItemsSource = errorsTable.DefaultView.RowFilter = String.Format("[Circuit] Like {0}", selectedValue.Text);
+               dataGridErrors.ItemsSource = errorsTable.DefaultView.RowFilter = String.Format("Circuit Like '{0}'", selectedValue.Text);
+                
             }
-            else if (tabStatistics.IsSelected)
+             else if (tabStatistics.IsSelected)
             {
-
+               dataGridStatistics.ItemsSource = statisticsTable.DefaultView.RowFilter = String.Format("Circuit Like '{0}'", selectedValue.Text);
             }
             else if (tabWarnings.IsSelected)
             {
-
+               dataGridWarnings.ItemsSource = warningsTable.DefaultView.RowFilter = String.Format("Circuit Like '{0}'", selectedValue.Text);
             }
         }
     }

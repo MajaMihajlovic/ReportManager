@@ -2,6 +2,7 @@
 using ReportManager.Model;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Windows;
 
 namespace ReportManager
 {
@@ -51,6 +52,18 @@ namespace ReportManager
                     sqlite_cmd.CommandText = "INSERT INTO summary (Category,Count) VALUES (@string,@numberOfInvalidChangesets);";
                     sqlite_cmd.Parameters.AddWithValue("@string", "Total Invalid Changesets");
                     sqlite_cmd.Parameters.AddWithValue("@numberOfInvalidChangesets", summary.NumberOfInvalidChangesets);
+                    sqlite_cmd.ExecuteNonQuery();
+                    sqlite_cmd.CommandText = "INSERT INTO summary (Category,Count) VALUES (@string,@numberOfPendingChangesets);";
+                    sqlite_cmd.Parameters.AddWithValue("@string", "Total Pending Changesets");
+                    sqlite_cmd.Parameters.AddWithValue("@numberOfPendingChangesets", summary.NumberOfPendingChangesets);
+                    sqlite_cmd.ExecuteNonQuery();
+                    sqlite_cmd.CommandText = "INSERT INTO summary (Category,Count) VALUES (@string,@NumberOfPendingExtracts);";
+                    sqlite_cmd.Parameters.AddWithValue("@string", "Total Pending Extracts");
+                    sqlite_cmd.Parameters.AddWithValue("@NumberOfPendingExtracts", summary.NumberOfPendingExtracts);
+                    sqlite_cmd.ExecuteNonQuery();
+                    sqlite_cmd.CommandText = "INSERT INTO summary (Category,Count) VALUES (@string,@NumberOfRejectedChangesets);";
+                    sqlite_cmd.Parameters.AddWithValue("@string", "Total Rejected Changesets");
+                    sqlite_cmd.Parameters.AddWithValue("@NumberOfRejectedChangesets", summary.NumberOfRejectedChangesets);
                     sqlite_cmd.ExecuteNonQuery();
                 }
             }

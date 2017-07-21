@@ -8,15 +8,31 @@
 xmlns:DVC="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         
         mc:Ignorable="d"
-        Title="ReportManager" Height="326" Width="434.606" ResizeMode="NoResize" Icon="../icons/Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico">
+    
+    Title="ReportManager" Height="354.112" Width="539.245" ResizeMode="NoResize" Icon="../icons/Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico">
+
+    <Window.Resources>
+
+
+        <LinearGradientBrush x:Key="HeaderBrush" StartPoint="0.5,0" EndPoint="0.5,1">
+            <GradientStop Color="#FF6B8E95" Offset="0"/>
+            <GradientStop Color="#FF14A7C1" Offset="1"/>
+            <GradientStop Color="#FF1E424E" Offset="0.509"/>
+            <GradientStop Color="#FF1D4855" Offset="0.542"/>
+            <GradientStop Color="#FF1D4855" Offset="0.542"/>
+            <GradientStop Color="#FF193A44" Offset="0.526"/>
+        </LinearGradientBrush>
+
+    </Window.Resources>
+
     <Grid Margin="28,0,24,-12">
         <Grid.RowDefinitions>
             <RowDefinition Height="137"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <DVC:Chart Name="mcChart" 
-           Width="405" Height="236"
-           Background="LightSteelBlue" Margin="-19,23,-9,0" HorizontalAlignment="Left" Grid.RowSpan="2" VerticalAlignment="Top">
+           Width="505" Height="236"
+           Background ="{StaticResource HeaderBrush}" Margin="-19,23,-5,0" HorizontalAlignment="Left" Grid.RowSpan="2" VerticalAlignment="Top" FontSize="14">
             <DVC:Chart.Series>
                 <DVC:PieSeries Title="Experience" 
             IndependentValueBinding="{Binding Path=Key}"
@@ -24,7 +40,7 @@ xmlns:DVC="clr-namespace:System.Windows.Controls.DataVisualization.Charting;asse
                 </DVC:PieSeries>
             </DVC:Chart.Series>
         </DVC:Chart>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="30" Margin="164,128,-17,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="220" FontWeight="Bold"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="30" Margin="137,154,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="220" FontWeight="Bold" FontSize="14"/>
 
 
     </Grid>

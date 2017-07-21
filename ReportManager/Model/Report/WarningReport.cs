@@ -27,6 +27,7 @@ namespace ReportManager.Model.Report
                                 if (line.StartsWith("\t -"))
                                 {
                                     var warningErorRecordBuilder = new WarningErrorRecordBuilder(s);
+                                    director.Contruct(warningErorRecordBuilder);
                                     director.Contruct(warningErorRecordBuilder,line);
                                     warningRecords.Add(warningErorRecordBuilder.WarningErrorRecord);
                                 }

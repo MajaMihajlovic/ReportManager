@@ -60,9 +60,10 @@ namespace ReportManager.Model.Report
                     }
 
                     var staticticBuilder = new StatisticRecordBuilder(s);
-                    director.Construct(staticticBuilder, warningCount,errorCount);
+                    director.Contruct(staticticBuilder);
+                    director.Construct(staticticBuilder, warningCount, errorCount);
                     statisticRecords.Add(staticticBuilder.StatisticRecord);
-                    }
+                }
             }
             return statisticRecords;
         }
