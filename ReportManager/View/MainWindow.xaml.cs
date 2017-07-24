@@ -15,7 +15,7 @@ namespace ReportManager
         private static string  WARNING="warnings";
         private static string ERROR = "errors";
         private static string STATISTICS = "statistics";
-        private List<string> allFiles;
+        private List<string> collectedFiles;
         private string _pathForSaving;
 
         public MainWindow()
@@ -43,14 +43,13 @@ namespace ReportManager
         {
             var fbd = new FolderBrowserDialog();
             fbd.ShowDialog();
-            if (fbd.SelectedPath.Contains("Reports"))
+            if (!(string.IsNullOrWhiteSpace(fbd.SelectedPath)) && fbd.SelectedPath.Contains("Reports"))
             {
                 path.Text = fbd.SelectedPath;
                 cf = new CollectFiles();
-                allFiles = cf.CollectAllFiles(path.Text.ToString().Replace("\\", "/"));
+                collectedFiles = cf.CollectAllFiles(path.Text.ToString().Replace("\\", "/"));
             }
             else System.Windows.MessageBox.Show("Wrong directory, please check READ ME file.");
-  
         }
 
         private void showReports_Click(object sender, RoutedEventArgs e)
@@ -73,11 +72,11 @@ namespace ReportManager
             try
             {
                 var sqlWriter = new SQLiteWriter();
-                IEnumerable<Record> errorRecords = new ErrorReport().MakeRecords(allFiles);
+                IEnumerable<Record> errorRecords = new ErrorReport().GetRecords(collectedFiles);
                 sqlWriter.WriteRecords(ERROR, errorRecords);
-                List<Record> statisticRecords = new StatisticReport().MakeRecords(allFiles);
+                List<Record> statisticRecords = new StatisticReport().GetRecords(collectedFiles);
                 sqlWriter.WriteStatistics(STATISTICS, statisticRecords);
-                IEnumerable<Record> warningRecords = new WarningReport().MakeRecords(allFiles);
+                IEnumerable<Record> warningRecords = new WarningReport().GetRecords(collectedFiles);
                 sqlWriter.WriteRecords(WARNING, warningRecords);
                 Summary summary = cf.MakeSummary();
                 sqlWriter.WriteSummary(summary);
@@ -86,8 +85,7 @@ namespace ReportManager
             {
                 importFolder.IsEnabled = true;
             }
-
-            System.Windows.MessageBox.Show("All data imported!", "Imported completed", MessageBoxButton.OK, MessageBoxImage.Information);
+            System.Windows.MessageBox.Show("All data imported!", "Import completed", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void path_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)

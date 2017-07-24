@@ -3,7 +3,8 @@ using System.Data;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Controls;
-using System;
+using ReportManager.View;
+using ReportManager.Model.Report;
 
 namespace ReportManager
 {
@@ -13,6 +14,7 @@ namespace ReportManager
         private DataTable statisticsTable = new DataTable();
         private DataTable errorsTable = new DataTable();
         private DataTable warningsTable = new DataTable();
+        private bool buttonPressed = false;
 
         public Reports(List<string> list)
         {
@@ -55,7 +57,14 @@ namespace ReportManager
 
         private void ShowDiagramClick(object sender, RoutedEventArgs e)
         {
-            Diagram diagram = new ReportManager.Diagram();
+            Diagram diagram = new Diagram();
+            if (StatisticReport.errorTypes != null)
+            {
+                barChartErrors barCharErrors = new barChartErrors();
+                BarChart barChart = new BarChart();
+                barCharErrors.Show();
+                barChart.Show();
+            }
             diagram.Show();
         }
 
@@ -90,20 +99,35 @@ namespace ReportManager
                 selectedValue.Text = GetSelectedCellValue(cellInfo);
         }
 
+        public void FilterTable(DataTable dataTable,DataGrid dataGrid)
+        {
+            if (!buttonPressed)
+            {
+                dataTable.DefaultView.RowFilter = string.Format("Circuit Like '{0}'", selectedValue.Text);
+                dataGrid.ItemsSource = dataTable.DefaultView;
+                buttonPressed = true;
+            }
+            else
+            {
+                dataTable.DefaultView.RowFilter = string.Empty;
+                dataGrid.ItemsSource = dataTable.DefaultView;
+                buttonPressed = false;
+            }
+        }
+
         private void filter_Click(object sender, RoutedEventArgs e)
         {
             if (tabErrors.IsSelected)
             {
-               dataGridErrors.ItemsSource = errorsTable.DefaultView.RowFilter = String.Format("Circuit Like '{0}'", selectedValue.Text);
-                
+                FilterTable(errorsTable,dataGridErrors);
             }
              else if (tabStatistics.IsSelected)
             {
-               dataGridStatistics.ItemsSource = statisticsTable.DefaultView.RowFilter = String.Format("Circuit Like '{0}'", selectedValue.Text);
+                FilterTable(statisticsTable, dataGridStatistics);
             }
             else if (tabWarnings.IsSelected)
             {
-               dataGridWarnings.ItemsSource = warningsTable.DefaultView.RowFilter = String.Format("Circuit Like '{0}'", selectedValue.Text);
+                FilterTable(warningsTable, dataGridWarnings);
             }
         }
     }

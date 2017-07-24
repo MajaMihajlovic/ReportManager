@@ -9,19 +9,18 @@ namespace ReportManager.Model.Report
 {
 public class ErrorReport : Report
 {
-        //get 
-public override List<Record> MakeRecords(List<string> allFiles)
+public override List<Record> GetRecords(List<string> collectedFiles)
 {
     var errorRecords = new List<Record>();
     Director director = new Director();
     string fileType = "SummaryReport";
-    foreach (string s in allFiles)
+    foreach (string fileName in collectedFiles)
     {
-    if (s.Contains(fileType))
+    if (fileName.Contains(fileType))
     {
     try
     {
-        using (StreamReader file = new StreamReader(s))
+        using (StreamReader file = new StreamReader(fileName))
         {
             string line = null;
             while ((line = file.ReadLine()) != null)
@@ -38,7 +37,7 @@ public override List<Record> MakeRecords(List<string> allFiles)
                             string line2 = null;
                             while ((line2 = file.ReadLine()) != null && !line2.Contains("Error description"))
                             {
-                            if (!String.IsNullOrWhiteSpace(line2))
+                            if (!string.IsNullOrWhiteSpace(line2))
                             {
                                 if (line2.Contains(';'))
                                 {
@@ -47,9 +46,9 @@ public override List<Record> MakeRecords(List<string> allFiles)
                                 content += line2 + " ";
                             }
                             }
-                            if (!String.IsNullOrEmpty(content))
+                            if (!string.IsNullOrEmpty(content))
                             {
-                                var warningErorRecordBuilder = new WarningErrorRecordBuilder(s);
+                                var warningErorRecordBuilder = new WarningErrorRecordBuilder(fileName);
                                 director.Contruct(warningErorRecordBuilder);
                                 director.Contruct(warningErorRecordBuilder, line);
                                 errorRecords.Add(warningErorRecordBuilder.WarningErrorRecord);

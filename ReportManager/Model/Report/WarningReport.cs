@@ -8,25 +8,25 @@ namespace ReportManager.Model.Report
 {
     public class WarningReport:Report
     {
-        public override List<Record> MakeRecords(List<string> allFiles)
+        public override List<Record> GetRecords(List<string> collectedFiles)
         {
             var fileType = "CIMToDMSTranformReports";
             var warningRecords = new List<Record>();
             Director director = new Director();
-            foreach (string s in allFiles)
+            foreach (string fileName in collectedFiles)
             {
-                if (s.Contains(fileType))
+                if (fileName.Contains(fileType))
                 {
                     try
                     {
-                        using (var file = new StreamReader(s))
+                        using (var file = new StreamReader(fileName))
                         {
                             string line = null;
                             while ((line = file.ReadLine()) != null)
                             {
                                 if (line.StartsWith("\t -"))
                                 {
-                                    var warningErorRecordBuilder = new WarningErrorRecordBuilder(s);
+                                    var warningErorRecordBuilder = new WarningErrorRecordBuilder(fileName);
                                     director.Contruct(warningErorRecordBuilder);
                                     director.Contruct(warningErorRecordBuilder,line);
                                     warningRecords.Add(warningErorRecordBuilder.WarningErrorRecord);

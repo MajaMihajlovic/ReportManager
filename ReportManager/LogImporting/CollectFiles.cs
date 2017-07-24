@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows;
 
 namespace ReportManager.LogImporting
 {
     public class CollectFiles
     {
-        private List<string> allFiles=new List<string>();
+        private List<string> collectedFiles=new List<string>();
         private int _numberOfFiles;
         private int _numberOfInvalidChangesets;
         private int _numberOfInvalidExtracts;
@@ -20,11 +18,11 @@ namespace ReportManager.LogImporting
         public List<string> CollectAllFiles(string path)
         {
             ReadFiles(path);
-            return allFiles;
+            return collectedFiles;
         }
-        public void ReadFiles(String path)
+        public void ReadFiles(string path)
         {
-            this._path = path;
+            _path = path;
             string[] subDirs = null;
             try
             {
@@ -34,16 +32,16 @@ namespace ReportManager.LogImporting
             {
                 MessageBox.Show(ex.StackTrace, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            foreach (string s in subDirs)
+            foreach (string fileName in subDirs)
             {
-                if (s.Contains("ChangeSet") && s.Contains("Invalid")) _numberOfInvalidChangesets++;
-                if (s.Contains("Extract") && s.Contains("Invalid")) _numberOfInvalidExtracts++;
-                if (s.Contains("ChangeSet") && s.Contains("Pending")) _numberOfPendingChangesets++;
-                if (s.Contains("Extract") && s.Contains("Pending"))  _numberOfPendingExtracts++;
-                    if (s.Contains("ChangeSet") && s.Contains("Rejected")) _numberOfRejectedChangesets++;
+                if (fileName.Contains("ChangeSet") && fileName.Contains("Invalid")) _numberOfInvalidChangesets++;
+                if (fileName.Contains("Extract") && fileName.Contains("Invalid")) _numberOfInvalidExtracts++;
+                if (fileName.Contains("ChangeSet") && fileName.Contains("Pending")) _numberOfPendingChangesets++;
+                if (fileName.Contains("Extract") && fileName.Contains("Pending"))  _numberOfPendingExtracts++;
+                if (fileName.Contains("ChangeSet") && fileName.Contains("Rejected")) _numberOfRejectedChangesets++;
             }
-            allFiles.AddRange(subDirs);
-            allFiles.AddRange(Directory.GetFiles(path));
+            collectedFiles.AddRange(subDirs);
+            collectedFiles.AddRange(Directory.GetFiles(path));
             foreach (string subdir in subDirs)
             {
                 ReadFiles(subdir);

@@ -125,7 +125,7 @@
                         <ColumnDefinition Width="34*"/>
                         <ColumnDefinition Width="546*"/>
                     </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="dataGridStatistics" AlternationCount="2" RowStyle="{StaticResource RowStyleWithAlternation}" ColumnHeaderStyle="{StaticResource HeaderStyle}" HorizontalAlignment="Left" Height="393" Margin="-2,-4" VerticalAlignment="Top" Width="786" IsReadOnly="True" ColumnWidth="150" Grid.ColumnSpan="4" SelectionUnit="Cell" MouseDoubleClick="dataGridStatistics_MouseDoubleClick"/>
+                    <DataGrid x:Name="dataGridStatistics" AlternationCount="2" RowStyle="{StaticResource RowStyleWithAlternation}" ColumnHeaderStyle="{StaticResource HeaderStyle}" HorizontalAlignment="Left" Height="393" Margin="-9,0,-2,-10" VerticalAlignment="Top" Width="793" IsReadOnly="True" ColumnWidth="150" Grid.ColumnSpan="4" SelectionUnit="Cell" MouseDoubleClick="dataGridStatistics_MouseDoubleClick"/>
 
                 </Grid>
             </TabItem>
@@ -145,9 +145,9 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="showDiagram" Style="{StaticResource btnGlass}" Content="Show diagram" HorizontalAlignment="Left" Margin="544,438,0,0" VerticalAlignment="Top" Width="139" Click="ShowDiagramClick" FontSize="15" Grid.Column="2" Height="34"/>
+        <Button x:Name="showDiagram" Style="{StaticResource btnGlass}" Content="Show diagrams" HorizontalAlignment="Left" Margin="543,438,0,0" VerticalAlignment="Top" Width="129" Click="ShowDiagramClick" FontSize="15" Grid.Column="2" Height="30" RenderTransformOrigin="0.536,-0.003"/>
         <TextBox x:Name="selectedValue" HorizontalAlignment="Left" Height="26" Margin="124,441,0,0" Text="&#xD;&#xA;" VerticalAlignment="Top" Width="247" Grid.Column="2"/>
-        <Button x:Name="filter" Style="{StaticResource btnGlass}" Content="Filter" HorizontalAlignment="Left" Height="34" Margin="387,438,0,0" VerticalAlignment="Top" Width="119" Click="filter_Click" FontSize="15" Grid.Column="2"/>
+        <Button x:Name="filter" Style="{StaticResource btnGlass}" Content="Filter" HorizontalAlignment="Left" Margin="391,439,0,13" Width="130" Click="filter_Click" FontSize="15" Grid.Column="2"/>
 
     </Grid>
     <Window.Background>

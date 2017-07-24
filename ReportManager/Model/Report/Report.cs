@@ -12,7 +12,7 @@ namespace ReportManager.Model.Report
         public string Date { get; set; }
         public string CircuitName { get; set; }
 
-        public abstract List<Record> MakeRecords(List<string> allFiles);
+        public abstract List<Record> GetRecords(List<string> collectedFiles);
     
 }
 }

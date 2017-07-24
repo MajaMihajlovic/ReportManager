@@ -2,11 +2,10 @@
 using ReportManager.Model;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Windows;
 
 namespace ReportManager
 {
-   public class SQLiteWriter
+    public class SQLiteWriter
     {
         private SQLiteConnection sqlite_conn;
         private SQLiteCommand sqlite_cmd = new SQLiteCommand();
@@ -41,33 +40,18 @@ namespace ReportManager
                 using (sqlite_cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS summary (Category string, Count int );", sqlite_conn))
                 {
                     sqlite_cmd.ExecuteNonQuery();
-                    sqlite_cmd.CommandText = "INSERT INTO summary (Category,Count) VALUES (@string,@numberOfFiles);";
-                    sqlite_cmd.Parameters.AddWithValue("@string", "Total Number Log Directories Processed");
-                    sqlite_cmd.Parameters.AddWithValue("@numberOfFiles", summary.NumberOfFiles);
-                    sqlite_cmd.ExecuteNonQuery();
-                    sqlite_cmd.CommandText = "INSERT INTO summary (Category,Count) VALUES (@string,@numberOfInvalidExtracts);";
-                    sqlite_cmd.Parameters.AddWithValue("@string", "Total Invalid Extracts");
-                    sqlite_cmd.Parameters.AddWithValue("@numberOfInvalidExtracts", summary.NumberOfInvalidExtracts);
-                    sqlite_cmd.ExecuteNonQuery();
-                    sqlite_cmd.CommandText = "INSERT INTO summary (Category,Count) VALUES (@string,@numberOfInvalidChangesets);";
-                    sqlite_cmd.Parameters.AddWithValue("@string", "Total Invalid Changesets");
-                    sqlite_cmd.Parameters.AddWithValue("@numberOfInvalidChangesets", summary.NumberOfInvalidChangesets);
-                    sqlite_cmd.ExecuteNonQuery();
-                    sqlite_cmd.CommandText = "INSERT INTO summary (Category,Count) VALUES (@string,@numberOfPendingChangesets);";
-                    sqlite_cmd.Parameters.AddWithValue("@string", "Total Pending Changesets");
-                    sqlite_cmd.Parameters.AddWithValue("@numberOfPendingChangesets", summary.NumberOfPendingChangesets);
-                    sqlite_cmd.ExecuteNonQuery();
-                    sqlite_cmd.CommandText = "INSERT INTO summary (Category,Count) VALUES (@string,@NumberOfPendingExtracts);";
-                    sqlite_cmd.Parameters.AddWithValue("@string", "Total Pending Extracts");
-                    sqlite_cmd.Parameters.AddWithValue("@NumberOfPendingExtracts", summary.NumberOfPendingExtracts);
-                    sqlite_cmd.ExecuteNonQuery();
-                    sqlite_cmd.CommandText = "INSERT INTO summary (Category,Count) VALUES (@string,@NumberOfRejectedChangesets);";
-                    sqlite_cmd.Parameters.AddWithValue("@string", "Total Rejected Changesets");
-                    sqlite_cmd.Parameters.AddWithValue("@NumberOfRejectedChangesets", summary.NumberOfRejectedChangesets);
-                    sqlite_cmd.ExecuteNonQuery();
+                    foreach(string s in summary.CountedItems.Keys)
+                    {
+                        int number = 0;
+                        summary.CountedItems.TryGetValue(s, out number);
+                        sqlite_cmd.CommandText = "INSERT INTO summary (Category,Count) VALUES (@string,@numberOfFiles);";
+                        sqlite_cmd.Parameters.AddWithValue("@string",s );
+                        sqlite_cmd.Parameters.AddWithValue("@numberOfFiles", number);
+                        sqlite_cmd.ExecuteNonQuery();
+                    }
                 }
             }
-        }// koji exception hvatati
+        }
 
         public void WriteRecords(string tableName, IEnumerable<Record> records)
         {
