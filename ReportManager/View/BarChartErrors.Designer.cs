@@ -58,7 +58,7 @@
             this.ClientSize = new System.Drawing.Size(781, 439);
             this.Controls.Add(this.chart1);
             this.Name = "barChartErrors";
-            this.Text = "BarChartErrors";
+            this.Text = "Error types";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
 

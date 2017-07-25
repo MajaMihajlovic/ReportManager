@@ -7,65 +7,65 @@ using System.Windows;
 
 namespace ReportManager.Model.Report
 {
-public class ErrorReport : Report
-{
-public override List<Record> GetRecords(List<string> collectedFiles)
-{
-    var errorRecords = new List<Record>();
-    Director director = new Director();
-    string fileType = "SummaryReport";
-    foreach (string fileName in collectedFiles)
+    public class ErrorReport : Report
     {
-    if (fileName.Contains(fileType))
-    {
-    try
-    {
-        using (StreamReader file = new StreamReader(fileName))
+        public override List<Record> GetRecords(List<string> collectedFiles)
         {
-            string line = null;
-            while ((line = file.ReadLine()) != null)
+            var errorRecords = new List<Record>();
+            Director director = new Director();
+            string fileType = "SummaryReport";
+            foreach (string fileName in collectedFiles)
             {
-                if (line.Contains("ResultType"))
+                if (fileName.Contains(fileType))
                 {
-                    string line1 = null;
-                    while ((line1 = file.ReadLine()) != null)
+                    try
                     {
-                        string content = null;
-                        if (line1.Contains("Error description"))
+                        using (StreamReader file = new StreamReader(fileName))
                         {
-                            content += line1;
-                            string line2 = null;
-                            while ((line2 = file.ReadLine()) != null && !line2.Contains("Error description"))
+                            string line = null;
+                            while ((line = file.ReadLine()) != null)
                             {
-                            if (!string.IsNullOrWhiteSpace(line2))
-                            {
-                                if (line2.Contains(';'))
+                                if (line.Contains("ResultType"))
                                 {
-                                    line2 = line2.Replace(";", "");
+                                    string line1 = null;
+                                    while ((line1 = file.ReadLine()) != null)
+                                    {
+                                        string content = null;
+                                        if (line1.Contains("Error description"))
+                                        {
+                                            content += line1;
+                                            string line2 = null;
+                                            while ((line2 = file.ReadLine()) != null && !line2.Contains("Error description"))
+                                            {
+                                                if (!string.IsNullOrWhiteSpace(line2))
+                                                {
+                                                    if (line2.Contains(';'))
+                                                    {
+                                                        line2 = line2.Replace(";", "");
+                                                    }
+                                                    content += line2 + " ";
+                                                }
+                                            }//while ((line2 = file.ReadLine()) != null && !line2.Contains("Error description"))
+                                            if (!string.IsNullOrEmpty(content))
+                                            {
+                                                var warningErorRecordBuilder = new WarningErrorRecordBuilder(fileName);
+                                                director.Contruct(warningErorRecordBuilder);
+                                                director.Contruct(warningErorRecordBuilder, line);
+                                                errorRecords.Add(warningErorRecordBuilder.WarningErrorRecord);
+                                            }//if (!string.IsNullOrEmpty(content))
+                                        }//if (line1.Contains("Error description"))
+                                    }//while ((line1 = file.ReadLine()) != null)
                                 }
-                                content += line2 + " ";
-                            }
-                            }
-                            if (!string.IsNullOrEmpty(content))
-                            {
-                                var warningErorRecordBuilder = new WarningErrorRecordBuilder(fileName);
-                                director.Contruct(warningErorRecordBuilder);
-                                director.Contruct(warningErorRecordBuilder, line);
-                                errorRecords.Add(warningErorRecordBuilder.WarningErrorRecord);
                             }
                         }
                     }
+                    catch (IOException ex)
+                    {
+                        MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
+            return errorRecords;
         }
     }
-    catch (IOException ex)
-    {
-        MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-    }
-}
-}
-    return errorRecords;
-}
-}
 }

@@ -1,5 +1,4 @@
 ﻿using ReportManager.Builder;
-using ReportManager.View;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
@@ -23,109 +22,115 @@ namespace ReportManager.Model.Report
             {
                 if (fileName.Contains(fileType))
                 {
-                    int errorCount = 0;
-                    int warningCount = 0;
-                    try
+                int errorCount = 0;
+                int warningCount = 0;
+                try
+                {
+                    using (StreamReader file = new StreamReader(fileName))
                     {
-                        using (StreamReader file = new StreamReader(fileName))
+                    string line = null;
+                    int lineNumber = 0;
+                    do {
+                    if (!string.IsNullOrEmpty(fileContent)) {
+                        line = fileContent;
+                        fileContent = null;
+                    } else
+                    {
+                        line = file.ReadLine();
+                    }
+                    lineNumber++;
+                    if (lineNumber == 4)
+                    {
+                        if (line.Contains(":"))
                         {
-                            string line = null;
-                            int lineNumber = 0;
-                            do {
-                                if (!string.IsNullOrEmpty(fileContent)) {
-                                    line = fileContent;
-                                    fileContent = null;
-                                } else
-                                {
-                                    line = file.ReadLine(); }
-
-                                if (!string.IsNullOrEmpty(fileContent))
-                                {
-                                    line = fileContent;
-                                    fileContent = null;
-                                }
-                                lineNumber++;
-                                if (lineNumber == 4)
-                                {
-                                    if (line.Contains(":"))
-                                    {
-                                        errorCount = int.Parse(line.Split(':')[1]);
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("Unexpected file content!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                                    }
-                                }
-                                else if (lineNumber == 5)
-                                {
-                                    if (line.Contains(":"))
-                                    {
-                                        warningCount = int.Parse(line.Split(':')[1]);
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("Unexpected file content!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                                    }
-                                }
-                                else if (line.Contains("Warning with code"))
-                                {
-                                    string errorType = line.Split(' ')[3];
-                                    int numberOfErrors = 0;
-                                    while ((line = file.ReadLine()) != null && line.StartsWith("\t -"))
-                                    {
-                                        numberOfErrors += 1; ;
-                                    }
-                                    fileContent = line;
-                                    if (!warningTypes.ContainsKey(errorType))
-                                    {
-                                        warningTypes.Add(errorType, numberOfErrors);
-                                    }
-                                    else
-                                    {
-                                        int number = 0;
-                                        warningTypes.TryGetValue(errorType, out number);
-                                        warningTypes.Remove(errorType);
-                                        int total = number + numberOfErrors;
-                                        warningTypes.Add(errorType, total);
-                                    }
-                                }
-                                else if(line.Contains("Error with code"))
-                                {
-                                    string errorType = line.Split(' ')[3];
-                                    int numberOfErrors = 0;
-                                    while ((line = file.ReadLine()) != null && line.StartsWith("\t -"))
-                                    {
-                                        numberOfErrors += 1; ;
-                                    }
-                                    fileContent = line;
-                                    if (!errorTypes.ContainsKey(errorType))
-                                    {
-                                        errorTypes.Add(errorType, numberOfErrors);
-                                    }
-                                    else
-                                    {
-                                        int number = 0;
-                                        errorTypes.TryGetValue(errorType, out number);
-                                        errorTypes.Remove(errorType);
-                                        int total = number + numberOfErrors;
-                                        errorTypes.Add(errorType, total);
-                                    }
-                                }
-                            } while ((line != null));
+                            errorCount = int.Parse(line.Split(':')[1]);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Unexpected file content!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
-                    catch (IOException ex)
+                    else if (lineNumber == 5)
                     {
-                        MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                        if (line.Contains(":"))
+                        {
+                            warningCount = int.Parse(line.Split(':')[1]);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Unexpected file content!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
-
-                    var staticticBuilder = new StatisticRecordBuilder(fileName);
-                    director.Contruct(staticticBuilder);
-                    director.Construct(staticticBuilder, warningCount, errorCount);
-                    statisticRecords.Add(staticticBuilder.StatisticRecord);
-                }
+                    else if (line!=null && line.Contains("Warning with code"))
+                    {
+                        fileContent = GetWarningTypes(line, file);
+                    }
+                    else if(line != null  && line.Contains("Error with code"))
+                    {
+                        fileContent = GetErrorTypes(line, file);
+                    }
+                } while ((line != null));
+              }
             }
+            catch (IOException ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            var staticticBuilder = new StatisticRecordBuilder(fileName);
+            director.Contruct(staticticBuilder);
+            director.Construct(staticticBuilder, warningCount, errorCount);
+            statisticRecords.Add(staticticBuilder.StatisticRecord);
+            }
+        }
             return statisticRecords;
+        }
+
+        public string GetWarningTypes(string line, StreamReader file)
+        {
+            string errorType = line.Split(' ')[3];
+            int numberOfErrors = 0;
+            while ((line = file.ReadLine()) != null && line.StartsWith("\t -"))
+            {
+                numberOfErrors += 1; ;
+            }
+            string fileContent = line;
+            if (!warningTypes.ContainsKey(errorType))
+            {
+                warningTypes.Add(errorType, numberOfErrors);
+            }
+            else
+            {
+                int number = 0;
+                warningTypes.TryGetValue(errorType, out number);
+                warningTypes.Remove(errorType);
+                int total = number + numberOfErrors;
+                warningTypes.Add(errorType, total);
+            }
+            return fileContent;
+        }
+
+        public string GetErrorTypes(string line,StreamReader file)
+        {
+            string errorType = line.Split(' ')[3];
+            int numberOfErrors = 0;
+            while ((line = file.ReadLine()) != null && line.StartsWith("\t -"))
+            {
+                numberOfErrors += 1; ;
+            }
+            string fileContent = line;
+            if (!errorTypes.ContainsKey(errorType))
+            {
+                errorTypes.Add(errorType, numberOfErrors);
+            }
+            else
+            {
+                int number = 0;
+                errorTypes.TryGetValue(errorType, out number);
+                errorTypes.Remove(errorType);
+                int total = number + numberOfErrors;
+                errorTypes.Add(errorType, total);
+            }
+            return fileContent;
         }
     }
 }

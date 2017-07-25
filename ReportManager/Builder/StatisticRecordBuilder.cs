@@ -1,16 +1,12 @@
-﻿using System;
-using ReportManager.Model;
+﻿using ReportManager.Model;
 
 namespace ReportManager.Builder
 {
     public class StatisticRecordBuilder : RecordBuilder, IStatisticRecordBuilder
     {
-        private string _path;
-
         public StatisticRecordBuilder(string path) : base(path)
         {
             record = new StatisticRecord(path);
-            _path = path;
         }
 
         public StatisticRecord StatisticRecord

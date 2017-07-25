@@ -1,5 +1,4 @@
-﻿using System;
-using ReportManager.Model.Report;
+﻿using ReportManager.Model.Report;
 using System.Windows;
 
 namespace ReportManager.Builder
@@ -8,9 +7,9 @@ namespace ReportManager.Builder
     {
         private string _path;
 
-        public WarningErrorRecordBuilder(string path):base(path)
+        public WarningErrorRecordBuilder(string path) : base(path)
         {
-           record=new WarningErrorRecord(path);
+           record = new WarningErrorRecord(path);
             _path = path;
         }
 

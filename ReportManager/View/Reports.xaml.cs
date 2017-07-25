@@ -61,7 +61,7 @@ namespace ReportManager
             if (StatisticReport.errorTypes != null)
             {
                 barChartErrors barCharErrors = new barChartErrors();
-                BarChart barChart = new BarChart();
+                BarChartWarnings barChart = new BarChartWarnings();
                 barCharErrors.Show();
                 barChart.Show();
             }
