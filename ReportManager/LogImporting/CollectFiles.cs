@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ReportManager.Writing;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 

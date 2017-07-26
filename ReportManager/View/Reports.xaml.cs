@@ -20,10 +20,10 @@ namespace ReportManager
         {
             InitializeComponent();
             _reportTypes = list;
-            SQLiteReader sqlReader = new SQLiteReader();
+            //SQLiteReader sqlReader = new SQLiteReader();
             foreach (string s in _reportTypes)
             {
-                ShowTable(sqlReader.GetTable(s));
+               // ShowTable(sqlReader.GetTable(s));
             }
         }
 
