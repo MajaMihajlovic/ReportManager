@@ -1,9 +1,13 @@
-﻿using System.Data.SQLite;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data.SQLite;
 
 namespace ReportManager.Model
 {
     public class Record
     {
+        [Key]
+        public static int ID { get; set; }
+        [Key]
         public string CircuitName { get;  set; }
         public string LogDirectory { get; set; }
         public string Date { get; set; }
@@ -14,6 +18,7 @@ namespace ReportManager.Model
         public Record(string path)
         {
             string _path = path;
+            ID++;
         }
     }
 }

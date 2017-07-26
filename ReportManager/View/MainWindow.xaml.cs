@@ -80,6 +80,17 @@ namespace ReportManager
                 sqlWriter.WriteRecords(WARNING, warningRecords);
                 Summary summary = cf.MakeSummary();
                 sqlWriter.WriteSummary(summary);
+                ReportManagerContext context = new ReportManagerContext();
+                /*context.StatisticRecords.AddRange(statisticRecords);
+                context.Database.Log = Console.WriteLine;
+                context.SaveChanges();
+                context.Database.Log=Console.WriteLine;
+                List<WarningErrorRecord> errorRecords1 = new ErrorReport().GetRecords1(collectedFiles);
+                context.ErrorRecords.AddRange(errorRecords1);
+                context.Database.Log = Console.WriteLine;
+                context.SaveChanges();
+                context.Database.Log = Console.WriteLine;*/
+                
             }
             finally
             {

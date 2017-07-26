@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{29C540EC-86AE-469C-9D30-DAD930013884}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ReportManager</RootNamespace>
     <AssemblyName>ReportManager</AssemblyName>
@@ -38,6 +38,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>icons\Custom-Icon-Design-Pretty-Office-7-Product-documentation.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AdvancedDataGridView, Version=0.1.0.10, Culture=neutral, processorArchitecture=MSIL">
@@ -104,6 +107,7 @@
     <Compile Include="Builder\StatisticRecordBuilder.cs" />
     <Compile Include="Builder\WarningErrorRecordBuilder.cs" />
     <Compile Include="Model\Record\WarningErrorRecord.cs" />
+    <Compile Include="ReportManagerContext.cs" />
     <Compile Include="View\BarChartErrors.cs">
       <SubType>Form</SubType>
     </Compile>
