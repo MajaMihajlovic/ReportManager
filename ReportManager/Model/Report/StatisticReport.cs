@@ -85,6 +85,84 @@ namespace ReportManager.Model.Report
             return statisticRecords;
         }
 
+        public List<StatisticRecord> GetRecords1(List<string> collectedFiles)
+        {
+            Director director = new Director();
+            warningTypes = new Dictionary<string, int>();
+            errorTypes = new Dictionary<string, int>();
+            string fileType = "CIMToDMSTranformReports";
+            List<StatisticRecord> statisticRecords = new List<StatisticRecord>();
+            string fileContent = null;
+            foreach (string fileName in collectedFiles)
+            {
+                if (fileName.Contains(fileType))
+                {
+                    int errorCount = 0;
+                    int warningCount = 0;
+                    try
+                    {
+                        using (StreamReader file = new StreamReader(fileName))
+                        {
+                            string line = null;
+                            int lineNumber = 0;
+                            do
+                            {
+                                if (!string.IsNullOrEmpty(fileContent))
+                                {
+                                    line = fileContent;
+                                    fileContent = null;
+                                }
+                                else
+                                {
+                                    line = file.ReadLine();
+                                }
+                                lineNumber++;
+                                if (lineNumber == 4)
+                                {
+                                    if (line.Contains(":"))
+                                    {
+                                        errorCount = int.Parse(line.Split(':')[1]);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Unexpected file content!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                }
+                                else if (lineNumber == 5)
+                                {
+                                    if (line.Contains(":"))
+                                    {
+                                        warningCount = int.Parse(line.Split(':')[1]);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Unexpected file content!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                }
+                                else if (line != null && line.Contains("Warning with code"))
+                                {
+                                    fileContent = GetWarningTypes(line, file);
+                                }
+                                else if (line != null && line.Contains("Error with code"))
+                                {
+                                    fileContent = GetErrorTypes(line, file);
+                                }
+                            } while ((line != null));
+                        }
+                    }
+                    catch (IOException ex)
+                    {
+                        MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    var staticticBuilder = new StatisticRecordBuilder(fileName);
+                    director.Contruct(staticticBuilder);
+                    director.Construct(staticticBuilder, warningCount, errorCount);
+                    statisticRecords.Add(staticticBuilder.StatisticRecord);
+                }
+            }
+            return statisticRecords;
+        }
+
         public string GetWarningTypes(string line, StreamReader file)
         {
             string errorType = line.Split(' ')[3];

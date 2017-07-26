@@ -1,4 +1,5 @@
-﻿using System.Data.SQLite;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ReportManager.Model
 {
@@ -11,9 +12,9 @@ namespace ReportManager.Model
 
         public StatisticRecord(string path) : base(path) { }
 
-        public override void Accept(IVisitor visitor, SQLiteCommand sqlite_cmd,string tableName)
-        {
-            visitor.Visit(this,sqlite_cmd,tableName);
-        }
+        //public override void Accept(IVisitor visitor, SQLiteCommand sqlite_cmd,string tableName)
+        //{
+        //    visitor.Visit(this,sqlite_cmd,tableName);
+        //}
     }
 }

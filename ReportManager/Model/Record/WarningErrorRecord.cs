@@ -1,6 +1,4 @@
-﻿using System.Data.SQLite;
-
-namespace ReportManager.Model.Report
+﻿namespace ReportManager.Model.Report
 {
     public class WarningErrorRecord:Record
     {
@@ -10,9 +8,9 @@ namespace ReportManager.Model.Report
 
         public WarningErrorRecord(string path) : base(path) { }
 
-        public override void Accept(IVisitor visitor, SQLiteCommand sqlite_cmd,string tableName)
-        {
-            visitor.Visit(this, sqlite_cmd,tableName);
-        }
+        //public override void Accept(IVisitor visitor, SQLiteCommand sqlite_cmd,string tableName)
+        //{
+        //    visitor.Visit(this, sqlite_cmd,tableName);
+        //}
     }
 }
