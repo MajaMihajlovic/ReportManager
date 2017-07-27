@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ReportManager.Model
+﻿namespace ReportManager.Model
 {
     public class StatisticRecord:Record
     {
@@ -10,6 +7,7 @@ namespace ReportManager.Model
         public int SignalsCount { get; set; }
         public string Path { get; set; }
 
+        public StatisticRecord() { }
         public StatisticRecord(string path) : base(path) { }
 
         //public override void Accept(IVisitor visitor, SQLiteCommand sqlite_cmd,string tableName)

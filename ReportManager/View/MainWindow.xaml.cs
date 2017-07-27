@@ -34,10 +34,19 @@ namespace ReportManager
             }
             _pathForSaving = fbd.SelectedPath.Replace("\\", "/");
             var csvWriter = new CSVWriter();
-            //var sqlReader = new SQLiteReader();
-            //csvWriter.CreateCSVFile(sqlReader.GetTable(WARNING), _pathForSaving);
-           // csvWriter.CreateCSVFile(sqlReader.GetTable(ERROR), _pathForSaving);
-            //csvWriter.CreateCSVFile(sqlReader.GetTable(STATISTICS), _pathForSaving);
+            // var sqlReader = new SQLiteReader();
+            var reportManagerContext = new ReportManagerContext();
+            System.Windows.Forms.MessageBox.Show(reportManagerContext.StatisticRecords.Find(1).ToString());
+            List<StatisticRecord> statistics =new List<StatisticRecord>( reportManagerContext.StatisticRecords.Local);
+            System.Windows.Forms.MessageBox.Show(statistics.Count.ToString());
+            foreach (var s in statistics)
+                System.Windows.Forms.MessageBox.Show(s.ToString());
+            
+            var errors = reportManagerContext.ErrorRecords.ToListAsync().Result.ToDataTable();
+            var warrnings = reportManagerContext.WarningRecords.ToListAsync().Result.ToDataTable();
+            //csvWriter.CreateCSVFile(statistics, _pathForSaving);
+            csvWriter.CreateCSVFile(errors, _pathForSaving);
+            csvWriter.CreateCSVFile(warrnings, _pathForSaving);
             System.Windows.Forms.MessageBox.Show("Reports are saved!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -70,39 +79,26 @@ namespace ReportManager
 
         private void importFolder_Click(object sender, RoutedEventArgs e)
         {
-           // Database.SetInitializer(new NullDatabaseInitializer<ReportManagerContext>());
+            //Database.SetInitializer(new NullDatabaseInitializer<ReportManagerContext>());
             importFolder.IsEnabled = false;
             try
             {
-                //var sqlWriter = new SQLiteWriter();
-                IEnumerable<Record> errorRecords = new ErrorReport().GetRecords(collectedFiles);
-               // sqlWriter.WriteRecords(ERROR, errorRecords);
-                List<Record> statisticRecords = new StatisticReport().GetRecords(collectedFiles);
-               // sqlWriter.WriteStatistics(STATISTICS, statisticRecords);
-                IEnumerable<Record> warningRecords = new WarningReport().GetRecords(collectedFiles);
-               // sqlWriter.WriteRecords(WARNING, warningRecords);
+                List<ErrorRecord> errorRecords = new ErrorReport().GetRecords(collectedFiles);
+                List<StatisticRecord> statisticRecords = new StatisticReport().GetRecords(collectedFiles);
+                List<WarningRecord> warningRecords = new WarningReport().GetRecords(collectedFiles);
+                List<StatisticRecord> statisticRecords1 = new StatisticReport().GetRecords(collectedFiles);
                 Summary summary = cf.MakeSummary();
-               // sqlWriter.WriteSummary(summary);
-
-                //
                 var dbWriter = new ReportManagerContext();
+                dbWriter.WriteErrors(errorRecords);
+                dbWriter.WriteWarnings(warningRecords);
                 dbWriter.WriteSummary(summary);
-
-                //List<StatisticRecord> statisticRecords1 = new StatisticReport().GetRecords1(collectedFiles);
-               // dbWriter.WriteStatistic(statisticRecords1);
-                //dbWriter.WriteSummary(summary);
-
+                dbWriter.WriteStatistic(statisticRecords1);
             }
             finally
             {
                 importFolder.IsEnabled = true;
             }
             System.Windows.MessageBox.Show("All data imported!", "Import completed", MessageBoxButton.OK, MessageBoxImage.Information);
-            using(var context = new ReportManagerContext())
-            {
-
-
-            }
         }
 
         private void path_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)

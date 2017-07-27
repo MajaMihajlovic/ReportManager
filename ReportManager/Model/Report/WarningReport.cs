@@ -1,22 +1,26 @@
 ﻿using ReportManager.Builder;
-using ReportManager.Model.Report;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 
 namespace ReportManager.Model.Report
 {
-    public class WarningReport:Report
+    public class WarningReport : Report
     {
-        public override List<Record> GetRecords(List<string> collectedFiles)
+        public WarningReport() { }
+
+        public List<WarningRecord> GetRecords(List<string> collectedFiles)
         {
             var fileType = "CIMToDMSTranformReports";
-            var warningRecords = new List<Record>();
+            var warningRecords = new List<WarningRecord>();
             Director director = new Director();
             foreach (string fileName in collectedFiles)
             {
-                if (fileName.Contains(fileType))
+                if (!fileName.Contains(fileType))
                 {
+                    MessageBox.Show("Error", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else {
                     try
                     {
                         using (var file = new StreamReader(fileName))
@@ -26,20 +30,21 @@ namespace ReportManager.Model.Report
                             {
                                 if (line.StartsWith("\t -"))
                                 {
-                                    var warningErorRecordBuilder = new WarningErrorRecordBuilder(fileName);
+                                    var warningErorRecordBuilder = new WarningRecordBuilder(fileName);
                                     director.Contruct(warningErorRecordBuilder);
-                                    director.Contruct(warningErorRecordBuilder,line);
-                                    warningRecords.Add(warningErorRecordBuilder.WarningErrorRecord);
+                                    director.Contruct(warningErorRecordBuilder, line);
+                                    warningRecords.Add(warningErorRecordBuilder.WarningRecord);
                                 }
                             }
                         }
-                    }catch(IOException ex)
+                    }
+                    catch (IOException ex)
                     {
                         MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-                }
             }
+        }
             return warningRecords;
         }
-    }
+}
 }

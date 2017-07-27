@@ -9,7 +9,13 @@
             recordBuilder.BuildErrorCount(errorCount);
         }
 
-        public void Contruct(IWarningErroRecordBuilder recordBuilder, string content)
+        public void Contruct(IErrorRecordBuilder recordBuilder, string content)
+        {
+            recordBuilder.BuildFileName();
+            recordBuilder.BuildFileContent(content);
+        }
+
+        public void Contruct(IWarningRecordBuilder recordBuilder, string content)
         {
             recordBuilder.BuildFileName();
             recordBuilder.BuildFileContent(content);

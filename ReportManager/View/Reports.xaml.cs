@@ -5,6 +5,7 @@ using System.Windows.Data;
 using System.Windows.Controls;
 using ReportManager.View;
 using ReportManager.Model.Report;
+using ReportManager.Writing;
 
 namespace ReportManager
 {
@@ -23,7 +24,10 @@ namespace ReportManager
             //SQLiteReader sqlReader = new SQLiteReader();
             foreach (string s in _reportTypes)
             {
-               // ShowTable(sqlReader.GetTable(s));
+                // ShowTable(sqlReader.GetTable(s));
+               
+
+              
             }
         }
 

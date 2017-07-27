@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ReportManager.Model.Report
+﻿namespace ReportManager.Model.Report
 {
     public abstract class Report
     {
@@ -9,7 +7,5 @@ namespace ReportManager.Model.Report
         public string LogDirectory { get; set; }
         public string Date { get; set; }
         public string CircuitName { get; set; }
-
-        public abstract List<Record> GetRecords(List<string> collectedFiles);
     }
 }

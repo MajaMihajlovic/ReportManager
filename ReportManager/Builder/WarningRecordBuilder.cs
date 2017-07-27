@@ -1,21 +1,23 @@
-﻿using ReportManager.Model.Report;
+﻿using ReportManager.Builder;
+using ReportManager.Model;
 using System.Windows;
+using System;
 
-namespace ReportManager.Builder
+namespace ReportManager
 {
-    class WarningErrorRecordBuilder : RecordBuilder, IWarningErroRecordBuilder
+    class WarningRecordBuilder : RecordBuilder, IWarningRecordBuilder
     {
         private string _path;
 
-        public WarningErrorRecordBuilder(string path) : base(path)
+        public WarningRecordBuilder(string path) : base(path)
         {
-           record = new WarningErrorRecord(path);
+            record = new WarningRecord(path);
             _path = path;
         }
 
-        public WarningErrorRecord WarningErrorRecord
+        public WarningRecord WarningRecord
         {
-            get { return (WarningErrorRecord) record; }
+            get { return (WarningRecord)record; }
         }
 
         public void BuildFileName()
@@ -23,7 +25,7 @@ namespace ReportManager.Builder
             var array = _path.Split('\\');
             if (array.Length > 0)
             {
-               (record as WarningErrorRecord).File = array[array.Length - 1];
+                (record as WarningRecord).File = array[array.Length - 1];
             }
             else
             {
@@ -33,7 +35,7 @@ namespace ReportManager.Builder
 
         public void BuildFileContent(string content)
         {
-            (record as  WarningErrorRecord).FileContent = content.TrimStart();
+            (record as WarningRecord).FileContent = content.TrimStart();
         }
     }
 }
