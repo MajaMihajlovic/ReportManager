@@ -125,7 +125,7 @@
                         <ColumnDefinition Width="34*"/>
                         <ColumnDefinition Width="546*"/>
                     </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="dataGridStatistics" AlternationCount="2" RowStyle="{StaticResource RowStyleWithAlternation}" ColumnHeaderStyle="{StaticResource HeaderStyle}" HorizontalAlignment="Left" Height="393" Margin="-9,0,-2,-10" VerticalAlignment="Top" Width="793" IsReadOnly="True" ColumnWidth="150" Grid.ColumnSpan="4" SelectionUnit="Cell" MouseDoubleClick="dataGridStatistics_MouseDoubleClick"/>
+                    <DataGrid x:Name="dataGridStatistics" AlternationCount="2" RowStyle="{StaticResource RowStyleWithAlternation}" ColumnHeaderStyle="{StaticResource HeaderStyle}" HorizontalAlignment="Left" Height="389" Margin="-9,0,-2,-6" VerticalAlignment="Top" Width="793" IsReadOnly="True" ColumnWidth="150" Grid.ColumnSpan="4" SelectionUnit="Cell" MouseDoubleClick="dataGridStatistics_MouseDoubleClick" SelectionChanged="dataGridStatistics_SelectionChanged"/>
 
                 </Grid>
             </TabItem>

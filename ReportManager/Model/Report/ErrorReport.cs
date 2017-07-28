@@ -17,10 +17,7 @@ namespace ReportManager.Model.Report
             var errorRecords = new List<ErrorRecord>();
             foreach (string fileName in collectedFiles)
             {
-                if (!fileName.Contains(FILETYPE))
-                {
-                    MessageBox.Show("Error", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-                }else
+                if (fileName.Contains(FILETYPE))
                 {
                 try
                 {
@@ -29,11 +26,8 @@ namespace ReportManager.Model.Report
                         string line = null;
                         while ((line = file.ReadLine()) != null)
                         {
-                            if (!line.Contains("ResultType"))
-                            {
-                                MessageBox.Show("Error", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-                            }
-                            else { 
+                            if (line.Contains("ResultType"))
+                                { 
                                 string line1 = null;
                                 while ((line1 = file.ReadLine()) != null)
                                 {
@@ -54,16 +48,16 @@ namespace ReportManager.Model.Report
                                             }
                                             content += line2 + " ";
                                         }
-                                    }//while ((line2 = file.ReadLine()) != null && !line2.Contains("Error description"))
+                                    }
                                     if (!string.IsNullOrEmpty(content))
                                     {
                                         var warningErorRecordBuilder = new ErrorRecordBuilder(fileName);
                                         director.Contruct(warningErorRecordBuilder);
                                         director.Contruct(warningErorRecordBuilder, line);
                                         errorRecords.Add(warningErorRecordBuilder.ErrorRecord);
-                                    }//if (!string.IsNullOrEmpty(content))
-                                }//if (line1.Contains("Error description"))
-                                }//while ((line1 = file.ReadLine()) != null)
+                                    }
+                                }
+                                }
                             }
                         }
                     }

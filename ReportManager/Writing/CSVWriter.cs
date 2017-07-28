@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Windows;
@@ -15,7 +14,7 @@ namespace ReportManager
         {
             try
             {
-                using (StreamWriter sw = new StreamWriter(filePath + "/" + dt.TableName + ".csv"))
+                using (StreamWriter sw = new StreamWriter(filePath))
                 {
                     int iColCount = dt.Columns.Count;
                     for (int i = 0; i < iColCount; i++)

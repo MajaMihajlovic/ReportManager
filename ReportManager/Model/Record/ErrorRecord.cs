@@ -4,8 +4,8 @@
     {
         public string FileContent { get; set; }
         public string File { get; set; }
-        public string Path { get; set; }
 
+        public ErrorRecord() { }
         public ErrorRecord(string path) : base(path) { }
     }
 }

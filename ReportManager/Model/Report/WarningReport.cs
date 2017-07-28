@@ -16,11 +16,8 @@ namespace ReportManager.Model.Report
             Director director = new Director();
             foreach (string fileName in collectedFiles)
             {
-                if (!fileName.Contains(fileType))
+                if (fileName.Contains(fileType))
                 {
-                    MessageBox.Show("Error", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                else {
                     try
                     {
                         using (var file = new StreamReader(fileName))

@@ -2,9 +2,9 @@
 using ReportManager.Model;
 using ReportManager.Model.Report;
 using ReportManager.Writing;
-using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using System.Data;
+using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 
@@ -19,6 +19,9 @@ namespace ReportManager
         private static string STATISTICS = "statistics";
         private List<string> collectedFiles;
         private string _pathForSaving;
+        private DataTable errorsTable;
+        private DataTable warningsTable;
+        private DataTable statisticsTable;
 
         public MainWindow()
         {
@@ -32,22 +35,24 @@ namespace ReportManager
             {
                 return;
             }
+            MakeDataTables();
             _pathForSaving = fbd.SelectedPath.Replace("\\", "/");
             var csvWriter = new CSVWriter();
-            // var sqlReader = new SQLiteReader();
-            var reportManagerContext = new ReportManagerContext();
-            System.Windows.Forms.MessageBox.Show(reportManagerContext.StatisticRecords.Find(1).ToString());
-            List<StatisticRecord> statistics =new List<StatisticRecord>( reportManagerContext.StatisticRecords.Local);
-            System.Windows.Forms.MessageBox.Show(statistics.Count.ToString());
-            foreach (var s in statistics)
-                System.Windows.Forms.MessageBox.Show(s.ToString());
-            
-            var errors = reportManagerContext.ErrorRecords.ToListAsync().Result.ToDataTable();
-            var warrnings = reportManagerContext.WarningRecords.ToListAsync().Result.ToDataTable();
-            //csvWriter.CreateCSVFile(statistics, _pathForSaving);
-            csvWriter.CreateCSVFile(errors, _pathForSaving);
-            csvWriter.CreateCSVFile(warrnings, _pathForSaving);
+            csvWriter.CreateCSVFile(errorsTable, _pathForSaving+"/errors.csv");
+            csvWriter.CreateCSVFile(warningsTable, _pathForSaving+"/warrnings.csv");
+            csvWriter.CreateCSVFile(statisticsTable, _pathForSaving+"/statistics.csv");
             System.Windows.Forms.MessageBox.Show("Reports are saved!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void MakeDataTables()
+        {
+            var reportManagerContext = new ReportManagerContext();
+            errorsTable = reportManagerContext.ErrorRecords.ToList().ToDataTable();
+            warningsTable = reportManagerContext.WarningRecords.ToList().ToDataTable();
+            statisticsTable = reportManagerContext.StatisticRecords.ToList().ToDataTable();
+            errorsTable.SetColumnsOrder("ID", "CircuitName", "FileContent", "File", "LogDirectory", "Date", "FileState");
+            warningsTable.SetColumnsOrder("ID", "CircuitName", "FileContent", "File", "LogDirectory", "Date", "FileState");
+            statisticsTable.SetColumnsOrder("ID", "CircuitName", "ErrorCount", "WarningCount", "SignalsCount", "LogDirectory", "Date", "FileState");
         }
 
         private void browseButtonClick(object sender, RoutedEventArgs e)
@@ -83,22 +88,26 @@ namespace ReportManager
             importFolder.IsEnabled = false;
             try
             {
-                List<ErrorRecord> errorRecords = new ErrorReport().GetRecords(collectedFiles);
-                List<StatisticRecord> statisticRecords = new StatisticReport().GetRecords(collectedFiles);
-                List<WarningRecord> warningRecords = new WarningReport().GetRecords(collectedFiles);
-                List<StatisticRecord> statisticRecords1 = new StatisticReport().GetRecords(collectedFiles);
-                Summary summary = cf.MakeSummary();
-                var dbWriter = new ReportManagerContext();
-                dbWriter.WriteErrors(errorRecords);
-                dbWriter.WriteWarnings(warningRecords);
-                dbWriter.WriteSummary(summary);
-                dbWriter.WriteStatistic(statisticRecords1);
+                importToDB();
             }
             finally
             {
                 importFolder.IsEnabled = true;
             }
             System.Windows.MessageBox.Show("All data imported!", "Import completed", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        public void importToDB()
+        {
+            var dbWriter = new ReportManagerContext();
+            List<ErrorRecord> errorRecords = new ErrorReport().GetRecords(collectedFiles);
+            List<StatisticRecord> statisticRecords = new StatisticReport().GetRecords(collectedFiles);
+            List<WarningRecord> warningRecords = new WarningReport().GetRecords(collectedFiles);
+            Summary summary = cf.MakeSummary();
+            dbWriter.Write(errorRecords, dbWriter.ErrorRecords);
+            dbWriter.Write(warningRecords, dbWriter.WarningRecords);
+            dbWriter.WriteSummary(summary);
+            dbWriter.Write(statisticRecords, dbWriter.StatisticRecords);
         }
 
         private void path_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)

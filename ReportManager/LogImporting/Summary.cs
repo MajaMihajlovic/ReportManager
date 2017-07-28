@@ -6,6 +6,7 @@ namespace ReportManager.LogImporting
     {
         public List<KeyValue> parts { set; get; }
 
+        public Summary() { }
         public Summary(int numberOfFiles, int numberOfInvalidExtracts, int numberOfInvalidChangesets, int numberOfPendingChangesets, int numberOfPendingExtracts, int numberOfRejectedChangesets)
         {
             parts = new List<KeyValue>();

@@ -6,6 +6,8 @@ using System.Windows.Controls;
 using ReportManager.View;
 using ReportManager.Model.Report;
 using ReportManager.Writing;
+using System.Linq;
+using System;
 
 namespace ReportManager
 {
@@ -21,33 +23,48 @@ namespace ReportManager
         {
             InitializeComponent();
             _reportTypes = list;
-            //SQLiteReader sqlReader = new SQLiteReader();
+            var reportManagerContext = new ReportManagerContext();
             foreach (string s in _reportTypes)
             {
-                // ShowTable(sqlReader.GetTable(s));
-               
+                if (s.Equals("errors"))
+                {
+                    errorsTable = reportManagerContext.ErrorRecords.ToList().ToDataTable();
+                    ShowTable(s,errorsTable);
+                }
+                if (s.Equals("warnings"))
+                {
+                    warningsTable = reportManagerContext.WarningRecords.ToList().ToDataTable();
+                    ShowTable(s,warningsTable);
+                }
 
-              
+                if (s.Equals("statistics"))
+                {
+                    statisticsTable = reportManagerContext.StatisticRecords.ToList().ToDataTable();
+                    ShowTable(s,statisticsTable);
+                }
             }
         }
 
-        public void ShowTable(DataTable dt)
+        public void ShowTable(string tableName,DataTable dt)
         {
            
-            if (dt.TableName.Equals("warnings"))
+            if (tableName.Equals("warnings"))
             {
+                dt.SetColumnsOrder("ID", "CircuitName", "FileContent", "File", "LogDirectory", "Date", "FileState");
                 tabWarnings.IsEnabled = true;
                 warningsTable = dt;
                 dataGridWarnings.ItemsSource = dt.DefaultView;
             }
-            else if (dt.TableName.Equals("errors"))
+            else if (tableName.Equals("errors"))
             {
+                dt.SetColumnsOrder("ID", "CircuitName", "FileContent", "File", "LogDirectory", "Date", "FileState");
                 errorsTable = dt;
                 tabErrors.IsEnabled = true;
                 dataGridErrors.ItemsSource = dt.DefaultView;
             }
-            else if (dt.TableName.Equals("statistics"))
+            else if (tableName.Equals("statistics"))
             {
+                dt.SetColumnsOrder("ID", "CircuitName","ErrorCount","WarningCount","SignalsCount","LogDirectory","Date","FileState");
                 statisticsTable = dt;
                 tabStatistics.IsEnabled = true;
                 dataGridStatistics.ItemsSource = dt.DefaultView;
@@ -107,9 +124,15 @@ namespace ReportManager
         {
             if (!buttonPressed)
             {
-                dataTable.DefaultView.RowFilter = string.Format("Circuit Like '{0}'", selectedValue.Text);
-                dataGrid.ItemsSource = dataTable.DefaultView;
-                buttonPressed = true;
+                try
+                {
+                    dataTable.DefaultView.RowFilter = string.Format("CircuitName Like '{0}'", selectedValue.Text);
+                    dataGrid.ItemsSource = dataTable.DefaultView;
+                    buttonPressed = true;
+                }catch(Exception)
+                {
+                    MessageBox.Show("Select Circuit name!", "Error", MessageBoxButton.OK,MessageBoxImage.Error);
+                }
             }
             else
             {
@@ -133,6 +156,11 @@ namespace ReportManager
             {
                 FilterTable(warningsTable, dataGridWarnings);
             }
+        }
+
+        private void dataGridStatistics_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

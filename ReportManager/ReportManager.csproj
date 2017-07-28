@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{29C540EC-86AE-469C-9D30-DAD930013884}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ReportManager</RootNamespace>
     <AssemblyName>ReportManager</AssemblyName>
@@ -213,17 +213,13 @@
     <Compile Include="View\BarChartErrors.Designer.cs">
       <DependentUpon>BarChartErrors.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\Diagram1.cs" />
     <Compile Include="View\BarChartWarnings.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\BarChartWarnings.Designer.cs">
       <DependentUpon>BarChartWarnings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Visitor\IVisitor.cs" />
     <Compile Include="LogImporting\CollectFiles.cs" />
-    <Compile Include="Reading\SQLiteReader.cs" />
-    <Compile Include="Visitor\SQLiteVisitor.cs" />
     <Compile Include="View\Diagram.xaml.cs">
       <DependentUpon>Diagram.xaml</DependentUpon>
     </Compile>
@@ -239,7 +235,7 @@
     <Compile Include="Model\Report\WarningReport.cs" />
     <Compile Include="Writing\ReportManagerContext.cs" />
     <Compile Include="Writing\CSVWriter.cs" />
-    <Compile Include="Writing\ToDataTable.cs" />
+    <Compile Include="Writing\DataTableExtensions.cs" />
     <Page Include="View\Diagram.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

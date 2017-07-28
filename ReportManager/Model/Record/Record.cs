@@ -13,7 +13,6 @@ namespace ReportManager.Model
         public string Date { get; set; }
         public string FileState { get; set; }
 
-        //public virtual void Accept(IVisitor visitor, SQLiteCommand sqlite_cmd, string tableName) { }
         public Record() { }
         public Record(string path)
         {

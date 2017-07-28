@@ -11,6 +11,7 @@ namespace ReportManager.LogImporting
         public string Category { get; set; }
         public int Count { get; set; }
 
+        public KeyValue() { }
         public KeyValue(string v, int numberOfFiles)
         {
             Category = v;
